@@ -1,0 +1,50 @@
+#For Keil
+obj/
+lst/
+
+#For IAR
+Debug/
+Release/
+setting/
+
+#For OSX
+.DS_Store
+
+#Files
+*.log
+*.dep
+*.bak
+*.uvopt
+*.txt
+*.old
+*.bin
+!SampleCode/StdDriver/FMC_IAP/IAR/dummy.bin
+!SampleCode/StdDriver/FMC_IAP/IAR/Release/
+!SampleCode/StdDriver/FMC_IAP/IAR/Release/Exe/LDROM_code.bin
+!SampleCode/StdDriver/FMC_IAP/Keil/obj/
+!SampleCode/StdDriver/FMC_IAP/Keil/obj/LDROM_code.bin
+*.obj
+*.orig
+*.ok
+*~
+*.o
+*.i
+*.lst
+*.map
+*.d
+*.crf
+*.axf
+*.out
+*.pbi
+*.cout
+*.browse
+*.scc
+
+#Large stuff
+*.zip
+*.gz
+*.bz
+*.gzip
+*.7z
+*.rar
+
