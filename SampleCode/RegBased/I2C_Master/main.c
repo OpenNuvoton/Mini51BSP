@@ -71,7 +71,7 @@ void I2C_MasterRx(uint32_t u32Status)
     } else if (u32Status == 0x58) {             /* DATA has been received and NACK has been returned */
         g_u8RxData = I2C->I2CDAT;
         I2C->I2CON |= I2C_I2CON_STO_Msk | I2C_I2CON_SI_Msk;
-		while(I2C->I2CON & I2C_I2CON_STO_Msk);
+        while(I2C->I2CON & I2C_I2CON_STO_Msk);
         g_u8EndFlag = 1;
     } else {
         /* TO DO */
@@ -98,7 +98,7 @@ void I2C_MasterTx(uint32_t u32Status)
             I2C->I2CON |= I2C_I2CON_SI_Msk;
         } else {
             I2C->I2CON |= I2C_I2CON_STO_Msk | I2C_I2CON_SI_Msk;
-			while(I2C->I2CON & I2C_I2CON_STO_Msk);
+            while(I2C->I2CON & I2C_I2CON_STO_Msk);
             g_u8EndFlag = 1;
         }
     } else {
@@ -232,8 +232,8 @@ int32_t Read_Write_SLAVE(uint8_t slvaddr)
         I2C->I2CON |= I2C_I2CON_STA_Msk;
 
         /* Wait I2C Rx Finish */
-        while (g_u8EndFlag == 0);		
-		
+        while (g_u8EndFlag == 0);
+
         /* Compare data */
         if (g_u8RxData != g_au8TxData[2]) {
             printf("I2C Byte Write/Read Failed, Data 0x%x\n", g_u8RxData);

@@ -2,12 +2,12 @@
  * @file     EEPROM_24LC64.c
  * @version  V0.10
  * $Revision: 4 $
- * $Date: 13/09/30 6:48p $ 
+ * $Date: 13/09/30 6:48p $
  * @brief    MINI51 series 24LC64 EEPROM library source file
  *
  * @note
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
- *****************************************************************************/ 
+ *****************************************************************************/
 
 #include <stdio.h>
 #include "Mini51Series.h"
@@ -24,7 +24,7 @@
 void EEPROM_Init(void)
 {
     /* Open I2C module and set bus clock */
-    I2C_Open(I2C, 100000);    
+    I2C_Open(I2C, 100000);
 }
 
 /**
@@ -37,93 +37,79 @@ void EEPROM_Write(uint32_t u32Addr, uint8_t u8Data)
 {
     int32_t i32Err;
 
-    do 
-    {
+    do {
         i32Err = 0;
-        
+
         /* Send start */
         I2C_START(I2C);
         I2C_WAIT_READY(I2C);
-        
+
         /* Send control byte */
         I2C_SET_DATA(I2C, EEPROM_WRITE_ADDR);
-		I2C_SET_CONTROL_REG(I2C, I2C_SI);
+        I2C_SET_CONTROL_REG(I2C, I2C_SI);
         I2C_WAIT_READY(I2C);
-        
-        if(I2C_GET_STATUS(I2C) == 0x18)
-        {
-             /* ACK */
-            
+
+        if(I2C_GET_STATUS(I2C) == 0x18) {
+            /* ACK */
+
             /* Send high address */
             I2C_SET_DATA(I2C, (u32Addr >> 8) & 0xFFUL); // high address
             I2C_SET_CONTROL_REG(I2C, I2C_SI);
             I2C_WAIT_READY(I2C);
-            if(I2C_GET_STATUS(I2C) == 0x28)
-            {
+            if(I2C_GET_STATUS(I2C) == 0x28) {
                 /* ACK */
-    
+
                 /* Send low address */
                 I2C_SET_DATA(I2C, u32Addr & 0xFFUL); // low address
                 I2C_SET_CONTROL_REG(I2C, I2C_SI);
                 I2C_WAIT_READY(I2C);
-                if(I2C_GET_STATUS(I2C) == 0x28)
-                {
+                if(I2C_GET_STATUS(I2C) == 0x28) {
                     /* ACK */
-        
+
                     /* Send data */
                     I2C_SET_DATA(I2C, u8Data); // data
                     I2C_SET_CONTROL_REG(I2C, I2C_SI);
                     I2C_WAIT_READY(I2C);
-                    if(I2C_GET_STATUS(I2C) == 0x28)
-                    {
+                    if(I2C_GET_STATUS(I2C) == 0x28) {
                         /* ACK */
-            
+
                         /* Send stop */
-                         I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
-            
-                    }
-                    else
-                    {
+                        I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
+
+                    } else {
                         /* NACK */
-    
+
                         /* Send data error */
                         i32Err = 4;
                     }
-                }
-                else
-                {
+                } else {
                     /* NACK */
-                
+
                     /* Send low address error */
                     i32Err = 3;
                 }
-            }
-            else
-            {
+            } else {
                 /* NACK */
-            
+
                 /* Send high address error */
                 i32Err = 2;
             }
-        }
-        else
-        {
-            /* NACK */    
-        
+        } else {
+            /* NACK */
+
             /* Send control error */
             i32Err = 1;
         }
 
-        if(i32Err)
-        {
+        if(i32Err) {
 
             /* Send stop */
-             I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
+            I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
 
             CLK_SysTickDelay(100);
         }
 
-    }while(i32Err);
+    } while(i32Err);
 
 }
 
@@ -138,120 +124,100 @@ uint8_t EEPROM_Read(uint32_t u32Addr)
     uint8_t u8Data;
 
     u8Data = 0;
-    do 
-    {
+    do {
         i32Err = 0;
-        
+
         /* Send start */
         I2C_START(I2C);
         I2C_WAIT_READY(I2C);
-        
+
         /* Send control byte */
         I2C_SET_DATA(I2C, EEPROM_WRITE_ADDR);
         I2C_SET_CONTROL_REG(I2C, I2C_SI);
         I2C_WAIT_READY(I2C);
-        if(I2C_GET_STATUS(I2C) == 0x18)
-        {
+        if(I2C_GET_STATUS(I2C) == 0x18) {
             /* ACK */
-    
+
             /* Send high address */
             I2C_SET_DATA(I2C, (u32Addr >> 8) & 0xFFUL); // high address
             I2C_SET_CONTROL_REG(I2C, I2C_SI);
             I2C_WAIT_READY(I2C);
-            if(I2C_GET_STATUS(I2C) == 0x28)
-            {
+            if(I2C_GET_STATUS(I2C) == 0x28) {
                 /* ACK */
-    
+
                 /* Send low address */
                 I2C_SET_DATA(I2C, u32Addr & 0xFFUL); // low address
                 I2C_SET_CONTROL_REG(I2C, I2C_SI);
                 I2C_WAIT_READY(I2C);
-                if(I2C_GET_STATUS(I2C) == 0x28)
-                {
+                if(I2C_GET_STATUS(I2C) == 0x28) {
                     /* ACK */
-        
+
                     /* Send data */
                     I2C_SET_CONTROL_REG(I2C, I2C_STA | I2C_SI);
                     I2C_WAIT_READY(I2C);
-                    if(I2C_GET_STATUS(I2C) == 0x10)
-                    {
+                    if(I2C_GET_STATUS(I2C) == 0x10) {
                         /* ACK */
 
                         /* Send control byte */
                         I2C_SET_DATA(I2C, EEPROM_READ_ADDR);
                         I2C_SET_CONTROL_REG(I2C, I2C_SI);
                         I2C_WAIT_READY(I2C);
-                        if(I2C_GET_STATUS(I2C) == 0x40)
-                        {
+                        if(I2C_GET_STATUS(I2C) == 0x40) {
                             I2C_SET_CONTROL_REG(I2C, I2C_SI);
                             I2C_WAIT_READY(I2C);
-                            
+
                             /* Read data */
                             u8Data = I2C_GET_DATA(I2C);
-                            if(I2C_GET_STATUS(I2C) == 0x58)
-                            {
+                            if(I2C_GET_STATUS(I2C) == 0x58) {
                                 /* NACK */
                                 /* Send stop */
                                 I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
-                            }
-                            else
-                            {
+                            } else {
                                 /* ACK */
-            
+
                                 /* read data error */
                                 i32Err = 6;
                             }
-                        }
-                        else
-                        {
+                        } else {
                             /* NACK */
-        
+
                             /* Send control read error */
                             i32Err = 5;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         /* NACK */
-    
+
                         /* Send start error */
                         i32Err = 4;
                     }
-                }
-                else
-                {
+                } else {
                     /* NACK */
-                
+
                     /* Send low address error */
                     i32Err = 3;
                 }
-            }
-            else
-            {
+            } else {
                 /* NACK */
-            
+
                 /* Send high address error */
                 i32Err = 2;
             }
-        }
-        else
-        {
-            /* NACK */    
-        
+        } else {
+            /* NACK */
+
             /* Send control write error */
             i32Err = 1;
 
         }
 
-        if(i32Err)
-        {
+        if(i32Err) {
             /* Send stop */
-             I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
+            I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
 
             CLK_SysTickDelay(10);
         }
 
-    }while(i32Err);
+    } while(i32Err);
 
     return u8Data;
 }
@@ -268,117 +234,99 @@ uint8_t EEPROM_SequentialRead(uint32_t u32Addr, uint8_t *pu8Buf, uint32_t u32Siz
     int32_t i32Err;
     int32_t i;
 
-    do 
-    {
+    do {
         i32Err = 0;
-        
+
         /* Send start */
         I2C_START(I2C);
         I2C_WAIT_READY(I2C);
-        
+
         /* Send control byte */
         I2C_SET_DATA(I2C, EEPROM_WRITE_ADDR);
         I2C_SET_CONTROL_REG(I2C, I2C_SI);
         I2C_WAIT_READY(I2C);
-        if(I2C_GET_STATUS(I2C) == 0x18)
-        {
+        if(I2C_GET_STATUS(I2C) == 0x18) {
             /* ACK */
-    
+
             /* Send high address */
             I2C_SET_DATA(I2C, (u32Addr >> 8) & 0xFFUL); // high address
             I2C_SET_CONTROL_REG(I2C, I2C_SI);
             I2C_WAIT_READY(I2C);
-            if(I2C_GET_STATUS(I2C) == 0x28)
-            {
+            if(I2C_GET_STATUS(I2C) == 0x28) {
                 /* ACK */
-    
+
                 /* Send low address */
                 I2C_SET_DATA(I2C, u32Addr & 0xFFUL); // low address
                 I2C_SET_CONTROL_REG(I2C, I2C_SI);
                 I2C_WAIT_READY(I2C);
-                if(I2C_GET_STATUS(I2C) == 0x28)
-                {
+                if(I2C_GET_STATUS(I2C) == 0x28) {
                     /* ACK */
-        
+
                     /* Send data */
                     I2C_SET_CONTROL_REG(I2C, I2C_STA | I2C_SI);
                     I2C_WAIT_READY(I2C);
-                    if(I2C_GET_STATUS(I2C) == 0x10)
-                    {
+                    if(I2C_GET_STATUS(I2C) == 0x10) {
                         /* ACK */
 
                         /* Send control byte */
                         I2C_SET_DATA(I2C, EEPROM_READ_ADDR);
                         I2C_SET_CONTROL_REG(I2C, I2C_SI);
                         I2C_WAIT_READY(I2C);
-                        if(I2C_GET_STATUS(I2C) == 0x40)
-                        {
-                            for(i=0;i<u32Size-1;i++)
-                            {
+                        if(I2C_GET_STATUS(I2C) == 0x40) {
+                            for(i=0; i<u32Size-1; i++) {
                                 I2C_SET_CONTROL_REG(I2C, I2C_SI | I2C_AA);
                                 I2C_WAIT_READY(I2C);
-                                
+
                                 /* Read data */
                                 pu8Buf[i] = I2C_GET_DATA(I2C);
                             }
-                            
+
                             I2C_SET_CONTROL_REG(I2C, I2C_SI);
                             I2C_WAIT_READY(I2C);
                             pu8Buf[i] = I2C_GET_DATA(I2C);
 
                             /* Send stop */
                             I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
-                        }
-                        else
-                        {
+                        } else {
                             /* NACK */
-        
+
                             /* Send control read error */
                             i32Err = 5;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         /* NACK */
-    
+
                         /* Send start error */
                         i32Err = 4;
                     }
-                }
-                else
-                {
+                } else {
                     /* NACK */
-                
+
                     /* Send low address error */
                     i32Err = 3;
                 }
-            }
-            else
-            {
+            } else {
                 /* NACK */
-            
+
                 /* Send high address error */
                 i32Err = 2;
             }
-        }
-        else
-        {
-            /* NACK */    
-        
+        } else {
+            /* NACK */
+
             /* Send control write error */
             i32Err = 1;
 
         }
 
-        if(i32Err)
-        {
+        if(i32Err) {
             /* Send stop */
-             I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
+            I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
 
             CLK_SysTickDelay(100);
         }
 
-    }while(i32Err);
+    } while(i32Err);
 
     return u32Size;
 }
@@ -394,93 +342,79 @@ void EEPROM_PageWrite(uint32_t u32Addr, uint8_t *pu8Buf)
     int32_t i32Err;
     int32_t i;
 
-    do 
-    {
+    do {
         i32Err = 0;
-        
+
         /* Send start */
         I2C_START(I2C);
         I2C_WAIT_READY(I2C);
-        
+
         /* Send control byte */
         I2C_SET_DATA(I2C, EEPROM_WRITE_ADDR);
         I2C_SET_CONTROL_REG(I2C, I2C_SI);
         I2C_WAIT_READY(I2C);
-        if(I2C_GET_STATUS(I2C) == 0x18)
-        {
+        if(I2C_GET_STATUS(I2C) == 0x18) {
             /* ACK */
-    
+
             /* Send high address */
             I2C_SET_DATA(I2C, (u32Addr >> 8) & 0xFFUL); // high address
             I2C_SET_CONTROL_REG(I2C, I2C_SI);
             I2C_WAIT_READY(I2C);
-            if(I2C_GET_STATUS(I2C) == 0x28)
-            {
+            if(I2C_GET_STATUS(I2C) == 0x28) {
                 /* ACK */
-    
+
                 /* Send low address */
                 I2C_SET_DATA(I2C, u32Addr & 0xFFUL); // low address
                 I2C_SET_CONTROL_REG(I2C, I2C_SI);
                 I2C_WAIT_READY(I2C);
-                if(I2C_GET_STATUS(I2C) == 0x28)
-                {
+                if(I2C_GET_STATUS(I2C) == 0x28) {
                     /* ACK */
-        
-                    for(i=0;i<32;i++)
-                    {
+
+                    for(i=0; i<32; i++) {
                         /* Send data */
                         I2C_SET_DATA(I2C, pu8Buf[i]); // data
                         I2C_SET_CONTROL_REG(I2C, I2C_SI);
                         I2C_WAIT_READY(I2C);
-                        if(I2C_GET_STATUS(I2C) == 0x30)
-                        {
+                        if(I2C_GET_STATUS(I2C) == 0x30) {
                             /* NACK */
-        
+
                             /* Send data error */
                             i32Err = 4;
                         }
                     }
-                    
+
                     /* Send stop when no any error */
-                    if(i32Err == 0)
-                    {
+                    if(i32Err == 0) {
                         /* Send stop */
-                         I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
+                        I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
                     }
-                }
-                else
-                {
+                } else {
                     /* NACK */
-                
+
                     /* Send low address error */
                     i32Err = 3;
                 }
-            }
-            else
-            {
+            } else {
                 /* NACK */
-            
+
                 /* Send high address error */
                 i32Err = 2;
             }
-        }
-        else
-        {
-            /* NACK */    
-        
+        } else {
+            /* NACK */
+
             /* Send control error */
             i32Err = 1;
         }
 
-        if(i32Err)
-        {
+        if(i32Err) {
             /* Send stop */
-             I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
+            I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI);
 
             CLK_SysTickDelay(100);
         }
 
-    }while(i32Err);
+    } while(i32Err);
 
 }
 

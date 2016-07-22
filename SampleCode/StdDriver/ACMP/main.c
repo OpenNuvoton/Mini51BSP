@@ -3,7 +3,7 @@
  * @version  V3.00
  * $Revision: 5 $
  * $Date: 15/10/06 1:19p $
- * @brief    Demonstrate Analog comparator (ACMP) comparison by comparing 
+ * @brief    Demonstrate Analog comparator (ACMP) comparison by comparing
  *           CPP0 (P1.5) with Band-gap voltage and shows the result on UART console.
  *
  * @note

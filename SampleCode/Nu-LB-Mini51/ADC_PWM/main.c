@@ -3,8 +3,8 @@
  * @version  V1.00
  * $Revision: 4 $
  * $Date: 15/10/06 11:22a $
- * @brief    This sample adjusts the PWM output duty according to ADC conversion 
- *           result where the input voltage is control by VR. The PWM output 
+ * @brief    This sample adjusts the PWM output duty according to ADC conversion
+ *           result where the input voltage is control by VR. The PWM output
  *           connects to a buzzer so user can control the buzzer tone with VR
  *
  * @note

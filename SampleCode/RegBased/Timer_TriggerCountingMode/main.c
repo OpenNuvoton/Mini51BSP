@@ -4,7 +4,7 @@
  * @version  V1.00
  * $Revision: 6 $
  * $Date: 15/10/06 11:48a $
- * @brief    Use the timer pin P3.2 to demonstrate timer trigger counting mode 
+ * @brief    Use the timer pin P3.2 to demonstrate timer trigger counting mode
  *           function. And displays the measured input frequency to UART console.
  *
  * @note

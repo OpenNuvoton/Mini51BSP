@@ -64,8 +64,8 @@ void ACMP_Open(ACMP_T *acmp, uint32_t u32ChNum, uint32_t u32NegSrc, uint32_t u32
 {
     if(u32NegSrc != ACMP_VNEG_PIN)
         ACMP->CMPRVCR = u32NegSrc;
-    ACMP->CMPCR[u32ChNum] = (ACMP->CMPCR[u32ChNum] & (~(ACMP_CMPCR_NEGSEL_Msk | ACMP_CMPCR_HYSEN_Msk))) | 
-                                ((u32NegSrc != ACMP_VNEG_PIN ? ACMP_CMPCR_NEGSEL_Msk : 0) | u32HysteresisEn | ACMP_CMPCR_ACMPEN_Msk);
+    ACMP->CMPCR[u32ChNum] = (ACMP->CMPCR[u32ChNum] & (~(ACMP_CMPCR_NEGSEL_Msk | ACMP_CMPCR_HYSEN_Msk))) |
+                            ((u32NegSrc != ACMP_VNEG_PIN ? ACMP_CMPCR_NEGSEL_Msk : 0) | u32HysteresisEn | ACMP_CMPCR_ACMPEN_Msk);
 }
 
 /**

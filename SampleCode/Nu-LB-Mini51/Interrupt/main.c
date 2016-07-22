@@ -3,7 +3,7 @@
  * @version  V1.00
  * $Revision: 6 $
  * $Date: 15/10/06 11:23a $
- * @brief    This sample code demonstrates how to let system enter 
+ * @brief    This sample code demonstrates how to let system enter
  *           and exit deep sleep mode with GPIO interrupts
  *
  * @note

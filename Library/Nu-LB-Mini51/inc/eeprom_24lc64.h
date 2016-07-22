@@ -2,12 +2,12 @@
  * @file     EEPROM_24LC64.h
  * @version  V0.10
  * $Revision: 2 $
- * $Date: 13/09/30 6:48p $ 
+ * $Date: 13/09/30 6:48p $
  * @brief    MINI51 series 24LC64 EEPROM library header file
  *
  * @note
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
- *****************************************************************************/  
+ *****************************************************************************/
 
 #ifndef __EEPROM_24LC64_H__
 #define __EEPROM_24LC64_H__

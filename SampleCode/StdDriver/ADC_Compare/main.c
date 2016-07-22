@@ -4,7 +4,7 @@
  * @version  V1.00
  * $Revision: 6 $
  * $Date: 15/10/06 1:19p $
- * @brief    Demonstrate ADC conversion and comparison function by monitoring 
+ * @brief    Demonstrate ADC conversion and comparison function by monitoring
  *           the conversion result of channel 0.
  *
  * @note

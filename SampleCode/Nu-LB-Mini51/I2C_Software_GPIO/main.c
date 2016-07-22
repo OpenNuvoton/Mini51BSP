@@ -3,7 +3,7 @@
  * @version  V0.10
  * $Revision: 8 $
  * $Date: 15/10/06 11:23a $
- * @brief    This sample code demonstrates how to use GPIO pins to 
+ * @brief    This sample code demonstrates how to use GPIO pins to
  *           simulate an I2C interface.
  *
  * @note

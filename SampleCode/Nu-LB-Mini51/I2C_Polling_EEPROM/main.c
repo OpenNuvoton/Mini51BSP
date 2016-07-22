@@ -3,7 +3,7 @@
  * @version  V0.10
  * $Revision: 10 $
  * $Date: 15/10/06 11:22a $
- * @brief    This sample demonstrates how to read/write EEPROM 
+ * @brief    This sample demonstrates how to read/write EEPROM
  *           via I2C interface using polling mode.
  *
  * @note

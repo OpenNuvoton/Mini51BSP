@@ -2,12 +2,12 @@
  * @file     i2c_software_gpio_with_timer.c
  * @version  V0.10
  * $Revision: 4 $
- * $Date: 13/09/30 6:48p $ 
+ * $Date: 13/09/30 6:48p $
  * @brief    MINI51 series software I2C driver source file
  *
  * @note
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
- *****************************************************************************/ 
+ *****************************************************************************/
 #include <stdio.h>
 #include "i2c_software_gpio_with_timer.h"
 
@@ -15,10 +15,10 @@
 #define I2C_SW_SDA P34
 #define I2C_SW_CLK P35
 
-typedef void (*TIMER_CALLBACK)(void);    
+typedef void (*TIMER_CALLBACK)(void);
 
 TIMER_CALLBACK funPtr;
-I2C_SW_FLAG_T I2C_SW_STATUS; 
+I2C_SW_FLAG_T I2C_SW_STATUS;
 
 uint8_t u8I2C_Buffer;
 uint8_t* p8I2C_Data;
@@ -33,10 +33,10 @@ uint32_t I2C_SW_I_Open(uint32_t u32BusClock)
 {
     /* Setup TIMER0 clock source */
     CLK->CLKSEL1 = (CLK->CLKSEL1 & ~CLK_CLKSEL1_TMR0_S_Msk) | CLK_CLKSEL1_TMR0_S_XTAL;
-    
+
     /* Enable TIMER0's clock */
     CLK->APBCLK |= CLK_APBCLK_TMR0_EN_Msk;
-    
+
     NVIC_EnableIRQ(TMR0_IRQn);
 
     if(u32BusClock>50000)
@@ -50,7 +50,7 @@ uint32_t I2C_SW_I_Open(uint32_t u32BusClock)
 
     /* Configure P3.4 and P3.5 as open-drain mode */
     GPIO_SetMode(P3, 0x30, GPIO_PMD_OPEN_DRAIN);
-    
+
     I2C_SW_SDA = 1;
     I2C_SW_CLK = 1;
     return 0;
@@ -62,11 +62,10 @@ uint32_t I2C_SW_I_Open(uint32_t u32BusClock)
   * @return None
   */
 void TMR0_IRQHandler(void)
-{ 
-     TIMER0->TISR |= TIMER_TISR_TIF_Msk;
+{
+    TIMER0->TISR |= TIMER_TISR_TIF_Msk;
 
-     if (funPtr!=NULL)                        
-    {
+    if (funPtr!=NULL) {
         (*funPtr)();
     }
 }
@@ -79,19 +78,14 @@ void TMR0_IRQHandler(void)
 
 void I2C_SW_I_Send_Stop(void)
 {
-    if(I2C_SW_CLK)
-    {
+    if(I2C_SW_CLK) {
         I2C_SW_SDA = 1;
         I2C_SW_STATUS.STOP = 1;
         I2C_SW_STATUS.BUSY = 0;
         funPtr = NULL;
-    }
-    else if(I2C_SW_SDA)
-    {
+    } else if(I2C_SW_SDA) {
         I2C_SW_SDA = 0;
-    }
-    else
-    {
+    } else {
         I2C_SW_CLK = 1;
     }
 }
@@ -103,36 +97,24 @@ void I2C_SW_I_Send_Stop(void)
   */
 void I2C_SW_I_Get_Byte(void)
 {
-    if(I2C_SW_STATUS.COUNT<8)
-    {
-        if(I2C_SW_CLK)
-        {
+    if(I2C_SW_STATUS.COUNT<8) {
+        if(I2C_SW_CLK) {
             u8I2C_Buffer |= I2C_SW_SDA << (7-I2C_SW_STATUS.COUNT++);
             I2C_SW_CLK = 0;
-        }
-        else
-        {
+        } else {
             I2C_SW_CLK = 1;
         }
-    }
-    else
-    {
-        if(I2C_SW_CLK)
-        {
+    } else {
+        if(I2C_SW_CLK) {
             I2C_SW_CLK = 0;
             I2C_SW_SDA = 1;
-            if(u32I2C_ByteSizeCount == u32I2C_ByteSize)
-            {
+            if(u32I2C_ByteSizeCount == u32I2C_ByteSize) {
                 funPtr = I2C_SW_I_Send_Stop;
-            }
-            else
-            {    
-                 I2C_SW_STATUS.COUNT = 0;
+            } else {
+                I2C_SW_STATUS.COUNT = 0;
                 u8I2C_Buffer = 0;
             }
-        }
-        else
-        {
+        } else {
             *(p8I2C_Data + u32I2C_ByteSizeCount++) = u8I2C_Buffer;
             I2C_SW_SDA = (u32I2C_ByteSizeCount == u32I2C_ByteSize)?1:0;
             I2C_SW_CLK = 1;
@@ -147,50 +129,38 @@ void I2C_SW_I_Get_Byte(void)
   */
 void I2C_SW_I_Send_Byte(void)
 {
-    if(I2C_SW_STATUS.COUNT<8)
-    {
-        if(I2C_SW_CLK)
-        {
+    if(I2C_SW_STATUS.COUNT<8) {
+        if(I2C_SW_CLK) {
             I2C_SW_CLK = 0;
-        }else
-        {
+        } else {
             I2C_SW_SDA = u8I2C_Buffer >> (7 - I2C_SW_STATUS.COUNT++);
             I2C_SW_CLK = 1;
         }
-    }else if(I2C_SW_STATUS.COUNT==8)
-    {
-        if(I2C_SW_CLK)
-        {
+    } else if(I2C_SW_STATUS.COUNT==8) {
+        if(I2C_SW_CLK) {
             I2C_SW_CLK = 0;
-        }else
-        {
+        } else {
             I2C_SW_SDA = 1;
             I2C_SW_STATUS.COUNT++;
             I2C_SW_CLK = 1;
         }
-    }else
-    {
+    } else {
         I2C_SW_STATUS.NACK = I2C_SW_SDA;
-        if(I2C_SW_SDA)
-        {
+        if(I2C_SW_SDA) {
             funPtr = I2C_SW_I_Send_Stop;
-        }else if(I2C_SW_STATUS.RW)
-        {
+        } else if(I2C_SW_STATUS.RW) {
             I2C_SW_STATUS.COUNT = 0;
             u8I2C_Buffer = 0;
-            funPtr = I2C_SW_I_Get_Byte;    
-        }else
-        {
-            if(u32I2C_ByteSizeCount == u32I2C_ByteSize)
-            {
+            funPtr = I2C_SW_I_Get_Byte;
+        } else {
+            if(u32I2C_ByteSizeCount == u32I2C_ByteSize) {
                 funPtr = I2C_SW_I_Send_Stop;
-            }else
-            {
+            } else {
                 I2C_SW_STATUS.COUNT = 0;
                 u8I2C_Buffer = *(p8I2C_Data + u32I2C_ByteSizeCount++);
             }
         }
-        I2C_SW_CLK = 0;    
+        I2C_SW_CLK = 0;
     }
 }
 
@@ -201,11 +171,9 @@ void I2C_SW_I_Send_Byte(void)
   */
 void I2C_SW_I_Send_Start(void)
 {
-    if(I2C_SW_SDA)
-    {
+    if(I2C_SW_SDA) {
         I2C_SW_SDA = 0;
-    }else
-    {
+    } else {
         I2C_SW_CLK = 0;
         I2C_SW_STATUS.START = 1;
         funPtr = I2C_SW_I_Send_Byte;
@@ -229,7 +197,7 @@ uint32_t I2C_SW_I_Send(uint8_t u8Address, uint8_t* p8Data, uint32_t u32ByteSize)
     I2C_SW_CLK = 1;
 
     u8I2C_Buffer = u8Address<<1;
-    p8I2C_Data = p8Data; 
+    p8I2C_Data = p8Data;
     u32I2C_ByteSize = u32ByteSize;
     u32I2C_ByteSizeCount = 0;
 
@@ -240,14 +208,14 @@ uint32_t I2C_SW_I_Send(uint8_t u8Address, uint8_t* p8Data, uint32_t u32ByteSize)
 
     TIMER0->TCSR |= TIMER_TCSR_CEN_Msk;
 
-    return 0;    
+    return 0;
 }
 
 /**
   * @brief Check if I2C is busy
   * @param None
   * @retval 0    Not Busy
-  * @retval 1    Busy    
+  * @retval 1    Busy
   */
 uint32_t I2C_SW_I_IsBZ(void)
 {
@@ -281,7 +249,7 @@ uint32_t I2C_SW_I_Get(uint8_t u8Address, uint8_t* p8Data, uint32_t u32ByteSize)
     I2C_SW_CLK = 1;
 
     u8I2C_Buffer = (u8Address<<1)+1;
-    p8I2C_Data = p8Data; 
+    p8I2C_Data = p8Data;
     u32I2C_ByteSize = u32ByteSize;
     u32I2C_ByteSizeCount = 0;
 
@@ -292,7 +260,7 @@ uint32_t I2C_SW_I_Get(uint8_t u8Address, uint8_t* p8Data, uint32_t u32ByteSize)
 
     TIMER0->TCSR |= TIMER_TCSR_CEN_Msk;
 
-    return 0;    
+    return 0;
 }
 
 

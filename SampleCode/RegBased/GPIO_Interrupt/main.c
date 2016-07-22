@@ -1,7 +1,7 @@
 /**************************************************************************//**
  * @file     main.c
  * @version  V2.10
- * $Date: 15/10/12 8:03p $ 
+ * $Date: 15/10/12 8:03p $
  * @brief    Shows the usage of GPIO interrupt function.
  *
  * @note
@@ -22,15 +22,13 @@
  * @details     The Port0/Port1 default IRQ, declared in startup_Mini51.s.
  */
 void GPIO01_IRQHandler(void)
-{    
+{
     /* To check if P1.5 interrupt occurred */
-    if (P1->ISRC & BIT5)
-    {
+    if (P1->ISRC & BIT5) {
         P1->ISRC = BIT5;
         printf("P1.5 INT occurred. \n");
-        
-    }else
-    {
+
+    } else {
         /* Un-expected interrupt. Just clear all PORT0, PORT1 interrupts */
         P0->ISRC = P0->ISRC;
         P1->ISRC = P1->ISRC;
@@ -51,12 +49,10 @@ void GPIO01_IRQHandler(void)
 void GPIO234_IRQHandler(void)
 {
     /* To check if P2.2 interrupt occurred */
-    if (P2->ISRC & BIT2)
-    {
+    if (P2->ISRC & BIT2) {
         P2->ISRC = BIT2;
         printf("P2.2 INT occurred. \n");
-    }else
-    {
+    } else {
         /* Un-expected interrupt. Just clear all PORT2, PORT3 and PORT4 interrupts */
         P2->ISRC = P2->ISRC;
         P3->ISRC = P3->ISRC;
@@ -68,9 +64,9 @@ void GPIO234_IRQHandler(void)
 
 void SYS_Init(void)
 {
-/*---------------------------------------------------------------------------------------------------------*/
-/* Init System Clock                                                                                       */
-/*---------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------------------------*/
+    /* Init System Clock                                                                                       */
+    /*---------------------------------------------------------------------------------------------------------*/
 
     /* Unlock protected registers */
     while(SYS->RegLockAddr != 1) {
@@ -83,7 +79,7 @@ void SYS_Init(void)
     CLK->PWRCON = CLK_PWRCON_IRC22M_EN_Msk | CLK_PWRCON_IRC10K_EN_Msk;
 
     /* Waiting for clock ready */
-    while((CLK->CLKSTATUS & (CLK_CLKSTATUS_IRC22M_STB_Msk | CLK_CLKSTATUS_IRC10K_STB_Msk)) != 
+    while((CLK->CLKSTATUS & (CLK_CLKSTATUS_IRC22M_STB_Msk | CLK_CLKSTATUS_IRC10K_STB_Msk)) !=
             (CLK_CLKSTATUS_IRC22M_STB_Msk | CLK_CLKSTATUS_IRC10K_STB_Msk));
 
 
@@ -95,9 +91,9 @@ void SYS_Init(void)
     SystemCoreClockUpdate();
 
 
-/*---------------------------------------------------------------------------------------------------------*/
-/* Init I/O Multi-function                                                                                 */
-/*---------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------------------------*/
+    /* Init I/O Multi-function                                                                                 */
+    /*---------------------------------------------------------------------------------------------------------*/
     /* Set P1 multi-function pins for UART RXD, TXD */
     SYS->P0_MFP = SYS_MFP_P00_TXD | SYS_MFP_P01_RXD;
 
@@ -107,7 +103,7 @@ void SYS_Init(void)
 
 void UART_Init(void)
 {
-    // Set UART to 8 bit character length, 1 stop bit, and no parity 
+    // Set UART to 8 bit character length, 1 stop bit, and no parity
     UART->LCR = UART_LCR_WLS_Msk;
     // 22.1184 MHz reference clock input, for 115200 bps
     // 22118400 / 115200 = 192. Using mode 2 to calculate baudrate, 192 - 2 = 190 = 0xBE
@@ -120,21 +116,21 @@ void UART_Init(void)
 int main (void)
 {
     /* Init System, IP clock and multi-function I/O */
-    SYS_Init(); //In the end of SYS_Init() will issue SYS_LockReg() to lock protected register. If user want to write protected register, please issue SYS_UnlockReg() to unlock protected register.    
+    SYS_Init(); //In the end of SYS_Init() will issue SYS_LockReg() to lock protected register. If user want to write protected register, please issue SYS_UnlockReg() to unlock protected register.
 
     /* Init UART for printf */
     UART_Init();
 
     printf("\n\nCPU @ %dHz\n", SystemCoreClock);
-                                
+
     printf("+----------------------------------------+ \n");
     printf("|    MINI51 GPIO Interrupt Sample Code   | \n");
     printf("+----------------------------------------+ \n");
 
     /*-----------------------------------------------------------------------------------------------------*/
     /* GPIO Interrupt Function Test                                                                        */
-    /*-----------------------------------------------------------------------------------------------------*/   
-    printf("\n  P15, P22 are used to test interrupt\n");    
+    /*-----------------------------------------------------------------------------------------------------*/
+    printf("\n  P15, P22 are used to test interrupt\n");
 
     /* Configure P1.5 as Input mode and enable interrupt by rising edge trigger */
     P1->PMD = (P1->PMD & ~0xC00) | (GPIO_PMD_INPUT << 10);
@@ -142,14 +138,14 @@ int main (void)
     P1->IEN |= 0x200000;
     NVIC_EnableIRQ(GPIO01_IRQn);
 
-     /*  Configure P2.2 as Quasi-bidirection mode and enable interrupt by falling edge trigger */
+    /*  Configure P2.2 as Quasi-bidirection mode and enable interrupt by falling edge trigger */
     P2->PMD = (P2->PMD & ~0x30) | (GPIO_PMD_QUASI << 4);
     P2->IMD &= ~0x4;
     P2->IEN |= 0x04;
     NVIC_EnableIRQ(GPIO234_IRQn);
 
-   /* Waiting for interrupts */
-   while (1);            
+    /* Waiting for interrupts */
+    while (1);
 
 }
 

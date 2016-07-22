@@ -193,22 +193,21 @@ void I2C_SetData(I2C_T *i2c, uint8_t u8Data)
   */
 void I2C_SetSlaveAddr(I2C_T *i2c, uint8_t u8SlaveNo, uint8_t u8SlaveAddr, uint8_t u8GCMode)
 {
-    switch (u8SlaveNo)
-    {
-        case 0:
-            i2c->I2CADDR0  = (u8SlaveAddr << 1) | u8GCMode;
-            break;
-        case 1:
-            i2c->I2CADDR1  = (u8SlaveAddr << 1) | u8GCMode;
-            break;
-        case 2:
-            i2c->I2CADDR2  = (u8SlaveAddr << 1) | u8GCMode;
-            break;
-        case 3:
-            i2c->I2CADDR3  = (u8SlaveAddr << 1) | u8GCMode;
-            break;
-        default:
-            i2c->I2CADDR0  = (u8SlaveAddr << 1) | u8GCMode;
+    switch (u8SlaveNo) {
+    case 0:
+        i2c->I2CADDR0  = (u8SlaveAddr << 1) | u8GCMode;
+        break;
+    case 1:
+        i2c->I2CADDR1  = (u8SlaveAddr << 1) | u8GCMode;
+        break;
+    case 2:
+        i2c->I2CADDR2  = (u8SlaveAddr << 1) | u8GCMode;
+        break;
+    case 3:
+        i2c->I2CADDR3  = (u8SlaveAddr << 1) | u8GCMode;
+        break;
+    default:
+        i2c->I2CADDR0  = (u8SlaveAddr << 1) | u8GCMode;
     }
 }
 
@@ -221,22 +220,21 @@ void I2C_SetSlaveAddr(I2C_T *i2c, uint8_t u8SlaveNo, uint8_t u8SlaveAddr, uint8_
   */
 void I2C_SetSlaveAddrMask(I2C_T *i2c, uint8_t u8SlaveNo, uint8_t u8SlaveAddrMask)
 {
-    switch (u8SlaveNo)
-    {
-        case 0:
-            i2c->I2CADM0  = u8SlaveAddrMask << 1;
-            break;
-        case 1:
-            i2c->I2CADM1  = u8SlaveAddrMask << 1;
-            break;
-        case 2:
-            i2c->I2CADM2  = u8SlaveAddrMask << 1;
-            break;
-        case 3:
-            i2c->I2CADM3  = u8SlaveAddrMask << 1;
-            break;
-        default:
-            i2c->I2CADM0  = u8SlaveAddrMask << 1;
+    switch (u8SlaveNo) {
+    case 0:
+        i2c->I2CADM0  = u8SlaveAddrMask << 1;
+        break;
+    case 1:
+        i2c->I2CADM1  = u8SlaveAddrMask << 1;
+        break;
+    case 2:
+        i2c->I2CADM2  = u8SlaveAddrMask << 1;
+        break;
+    case 3:
+        i2c->I2CADM3  = u8SlaveAddrMask << 1;
+        break;
+    default:
+        i2c->I2CADM0  = u8SlaveAddrMask << 1;
     }
 }
 

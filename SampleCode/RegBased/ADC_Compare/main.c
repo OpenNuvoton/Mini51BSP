@@ -103,19 +103,19 @@ int32_t main (void)
 
     // Configure and enable Comparator 0 to monitor channel 5 input less than 0x200
     ADC->ADCMPR[0] = ADC_ADCMPR_CMPEN_Msk |
-                ADC_ADCMPR_CMPIE_Msk |
-                ADC_CMP_LESS_THAN |
-                (5 << ADC_ADCMPR_CMPCH_Pos) |
-                (0xF << ADC_ADCMPR_CMPMATCNT_Pos) |
-                (0x200 << ADC_ADCMPR_CMPD_Pos);
+                     ADC_ADCMPR_CMPIE_Msk |
+                     ADC_CMP_LESS_THAN |
+                     (5 << ADC_ADCMPR_CMPCH_Pos) |
+                     (0xF << ADC_ADCMPR_CMPMATCNT_Pos) |
+                     (0x200 << ADC_ADCMPR_CMPD_Pos);
 
     // Configure and enable Comparator 1 to monitor channel 5 input greater or equal to 0x200
     ADC->ADCMPR[1] = ADC_ADCMPR_CMPEN_Msk |
-                ADC_ADCMPR_CMPIE_Msk |
-                ADC_CMP_GREATER_OR_EQUAL_TO |
-                (5 << ADC_ADCMPR_CMPCH_Pos) |
-                (0xF << ADC_ADCMPR_CMPMATCNT_Pos) |
-                (0x200 << ADC_ADCMPR_CMPD_Pos);
+                     ADC_ADCMPR_CMPIE_Msk |
+                     ADC_CMP_GREATER_OR_EQUAL_TO |
+                     (5 << ADC_ADCMPR_CMPCH_Pos) |
+                     (0xF << ADC_ADCMPR_CMPMATCNT_Pos) |
+                     (0x200 << ADC_ADCMPR_CMPD_Pos);
 
     // Enable ADC interrupt
     NVIC_EnableIRQ(ADC_IRQn);

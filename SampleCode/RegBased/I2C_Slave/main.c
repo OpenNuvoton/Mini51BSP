@@ -3,7 +3,7 @@
  * @version  V2.00
  * $Revision: 2 $
  * $Date: 15/10/12 8:09p $
- * @brief    Demonstrate how to set I2C in Slave mode to receive the data of a Master. 
+ * @brief    Demonstrate how to set I2C in Slave mode to receive the data of a Master.
  *           This sample code needs to work with I2C_MASTER.
  *
  * @note
@@ -54,14 +54,14 @@ void I2C_SlaveTRx(uint32_t u32Status)
     if (u32Status == 0x60) {                    /* Own SLA+W has been receive; ACK has been return */
         g_u8DataLen = 0;
         I2C->I2CON |= I2C_I2CON_AA_Msk | I2C_I2CON_SI_Msk;
-    } else if (u32Status == 0x80) {                 /* Previously address with own SLA address Data has been received; ACK has been returned*/                                                   
+    } else if (u32Status == 0x80) {                 /* Previously address with own SLA address Data has been received; ACK has been returned*/
         g_au8RxData[g_u8DataLen] = I2C->I2CDAT;
         g_u8DataLen++;
 
         if (g_u8DataLen == 2) {
             slave_buff_addr = (g_au8RxData[0] << 8) + g_au8RxData[1];
         }
-        
+
         if (g_u8DataLen == 3) {
             g_u8SlvData[slave_buff_addr] = g_au8RxData[2];
             g_u8DataLen = 0;
@@ -69,14 +69,14 @@ void I2C_SlaveTRx(uint32_t u32Status)
         I2C->I2CON |= I2C_I2CON_AA_Msk | I2C_I2CON_SI_Msk;
     } else if(u32Status == 0xA8) {              /* Own SLA+R has been receive; ACK has been return */
         I2C->I2CDAT = g_u8SlvData[slave_buff_addr];
-          slave_buff_addr++;
-          I2C->I2CON |= I2C_I2CON_AA_Msk | I2C_I2CON_SI_Msk;
-    } else if (u32Status == 0xC0) {                /* Data byte or last data in I2CDAT has been transmitted Not ACK has been received */                                                   
+        slave_buff_addr++;
         I2C->I2CON |= I2C_I2CON_AA_Msk | I2C_I2CON_SI_Msk;
-    } else if (u32Status == 0x88) {               /* Previously addressed with own SLA address; NOT ACK has been returned */                                                   
+    } else if (u32Status == 0xC0) {                /* Data byte or last data in I2CDAT has been transmitted Not ACK has been received */
+        I2C->I2CON |= I2C_I2CON_AA_Msk | I2C_I2CON_SI_Msk;
+    } else if (u32Status == 0x88) {               /* Previously addressed with own SLA address; NOT ACK has been returned */
         g_u8DataLen = 0;
         I2C->I2CON |= I2C_I2CON_AA_Msk | I2C_I2CON_SI_Msk;
-    } else if (u32Status == 0xA0) {                /* A STOP or repeated START has been received while still addressed as Slave/Receiver*/                                                   
+    } else if (u32Status == 0xA0) {                /* A STOP or repeated START has been received while still addressed as Slave/Receiver*/
         g_u8DataLen = 0;
         I2C->I2CON |= I2C_I2CON_AA_Msk | I2C_I2CON_SI_Msk;
     } else {
@@ -170,7 +170,7 @@ void I2C_Init(void)
     I2C->I2CADDR1 = (0x35 << 1);
     I2C->I2CADDR2 = (0x55 << 1);
     I2C->I2CADDR3 = (0x75 << 1);
-    
+
     I2C->I2CADM0  = (0x1 << 1);
     I2C->I2CADM1  = (0x4 << 1);
     I2C->I2CADM2  = (0x1 << 1);

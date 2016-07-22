@@ -3,13 +3,13 @@
  * @version  V1.00
  * $Revision: 9 $
  * $Date: 15/10/06 11:24a $
- * @brief    This is a starter kit sample enables all peripherals on learning 
+ * @brief    This is a starter kit sample enables all peripherals on learning
  *           board. Peripherals enabled are UART, SPI, I2C, Timer, ADC, and PWM
  *
  * @note
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
  *****************************************************************************/
- #include <stdio.h>
+#include <stdio.h>
 #include "Mini51Series.h"
 #include "lcd_driver.h"
 #include "eeprom_24lc64.h"

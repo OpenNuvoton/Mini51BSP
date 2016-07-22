@@ -111,16 +111,16 @@ void SPI_IRQHandler(void)
     while( !(SPI->STATUS & SPI_STATUS_TX_FULL_Msk) && (g_u32TxDataCount<TEST_COUNT) ) {
         SPI->TX = g_au32SourceData[g_u32TxDataCount++];
     }
-	
-	while(!(SPI->STATUS & SPI_STATUS_RX_EMPTY_Msk)) {
+
+    while(!(SPI->STATUS & SPI_STATUS_RX_EMPTY_Msk)) {
         temp = SPI->RX;
         g_au32DestinationData[g_u32RxDataCount++] = temp;
     }
-	
+
     if(g_u32TxDataCount>=TEST_COUNT) {
-		SPI->FIFO_CTL &= ~SPI_FIFO_CTL_TX_INTEN_Msk; /* Disable TX FIFO threshold interrupt */         
-		g_u8Done = 1;
-	}
+        SPI->FIFO_CTL &= ~SPI_FIFO_CTL_TX_INTEN_Msk; /* Disable TX FIFO threshold interrupt */
+        g_u8Done = 1;
+    }
 }
 
 int main(void)
@@ -135,7 +135,7 @@ int main(void)
 
     /* Init SPI */
     SPI_Init();
-    
+
     printf("\n\n");
     printf("+----------------------------------------------------------------------+\n");
     printf("|                       SPI Driver Sample Code                         |\n");
@@ -144,26 +144,26 @@ int main(void)
 
     printf("Configure SPI as a slave.\n");
     printf("SPI clock rate: %d Hz\n", SPI_GetBusClock(SPI0));
-    
+
     for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
         g_au32SourceData[u32DataCount] = 0x00550000 + u32DataCount;
         g_au32DestinationData[u32DataCount] = 0;
-    }    
-   
+    }
+
     SPI->CNTRL |= SPI_CNTRL_FIFO_Msk;
     SPI->FIFO_CTL |= (SPI_FIFO_CTL_RX_INTEN_Msk | SPI_FIFO_CTL_TX_INTEN_Msk);
     SPI->FIFO_CTL = (SPI->FIFO_CTL & ~(SPI_FIFO_CTL_TX_THRESHOLD_Msk | SPI_FIFO_CTL_RX_THRESHOLD_Msk) |
                      (2 << SPI_FIFO_CTL_TX_THRESHOLD_Pos) |
                      (1 << SPI_FIFO_CTL_RX_THRESHOLD_Pos));
     NVIC_EnableIRQ(SPI_IRQn);
-	
-	while(!g_u8Done);
-    
+
+    while(!g_u8Done);
+
     printf("Received data:\n");
     for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
         printf("%d:\t0x%08X\n", u32DataCount, g_au32DestinationData[u32DataCount]);
     }
-        
+
     printf("The data transfer was done.\n");
 
     while(1);

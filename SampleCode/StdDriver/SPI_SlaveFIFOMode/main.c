@@ -42,7 +42,7 @@ void SYS_Init(void)
 
     /* Switch HCLK clock source to XTL */
     //CLK_SetHCLK(CLK_CLKSEL0_HCLK_S_XTAL,CLK_CLKDIV_HCLK(1));
-	CLK_SetHCLK(CLK_CLKSEL0_HCLK_S_IRC22M, CLK_CLKDIV_HCLK(1));
+    CLK_SetHCLK(CLK_CLKSEL0_HCLK_S_IRC22M, CLK_CLKDIV_HCLK(1));
 
     /* STCLK to XTL STCLK to XTL */
     CLK_SetSysTickClockSrc(CLK_CLKSEL0_STCLK_S_XTAL);
@@ -91,8 +91,8 @@ void SPI_Init(void)
     /* Configure as a slave, clock idle low, falling clock edge Tx, rising edge Rx and 32-bit transaction */
     /* Set IP clock divider. SPI clock rate = 2MHz */
     SPI_Open(SPI, SPI_SLAVE, SPI_MODE_0, 32, 2000000);
-	
-	/* Configure SPI as a low level active device. */
+
+    /* Configure SPI as a low level active device. */
     SPI_SET_SS_LOW(SPI);
 }
 
@@ -103,16 +103,16 @@ void SPI_IRQHandler(void)
     while( (SPI_GET_TX_FIFO_FULL_FLAG(SPI0)==0) && (g_u32TxDataCount<TEST_COUNT) ) {
         SPI_WRITE_TX(SPI0, g_au32SourceData[g_u32TxDataCount++]);
     }
-	
-	while(SPI_GET_RX_FIFO_EMPTY_FLAG(SPI0) == 0) {
-		temp = SPI_READ_RX(SPI0);
-		g_au32DestinationData[g_u32RxDataCount++] = temp;
-	}
+
+    while(SPI_GET_RX_FIFO_EMPTY_FLAG(SPI0) == 0) {
+        temp = SPI_READ_RX(SPI0);
+        g_au32DestinationData[g_u32RxDataCount++] = temp;
+    }
 
     if(g_u32TxDataCount>=TEST_COUNT) {
-		SPI_DisableInt(SPI0, SPI_FIFO_TX_INTEN_MASK); /* Disable TX FIFO threshold interrupt */ 
+        SPI_DisableInt(SPI0, SPI_FIFO_TX_INTEN_MASK); /* Disable TX FIFO threshold interrupt */
         g_u8Done = 1;
-	}
+    }
 }
 
 int main(void)
@@ -127,7 +127,7 @@ int main(void)
 
     /* Init SPI */
     SPI_Init();
-    
+
     printf("\n\n");
     printf("+----------------------------------------------------------------------+\n");
     printf("|                       SPI Driver Sample Code                         |\n");
@@ -136,23 +136,23 @@ int main(void)
 
     printf("Configure SPI as a slave.\n");
     printf("SPI clock rate: %d Hz\n", SPI_GetBusClock(SPI0));
-    
+
     for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
         g_au32SourceData[u32DataCount] = 0x00550000 + u32DataCount;
         g_au32DestinationData[u32DataCount] = 0;
-    }    
-   
+    }
+
     SPI_EnableInt(SPI0, (SPI_FIFO_TX_INTEN_MASK | SPI_FIFO_RX_INTEN_MASK));
     NVIC_EnableIRQ(SPI_IRQn);
-	SPI_EnableFIFO(SPI0, 2, 1);
-	
-	while(!g_u8Done);
-	    
+    SPI_EnableFIFO(SPI0, 2, 1);
+
+    while(!g_u8Done);
+
     printf("Received data:\n");
     for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
         printf("%d:\t0x%08X\n", u32DataCount, g_au32DestinationData[u32DataCount]);
     }
-        
+
     printf("The data transfer was done.\n");
 
     while(1);

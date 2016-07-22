@@ -4,7 +4,7 @@
  * @version  V1.00
  * $Revision: 7 $
  * $Date: 15/10/06 11:48a $
- * @brief    Use the timer periodic mode to generate timer interrupt every 1 second. 
+ * @brief    Use the timer periodic mode to generate timer interrupt every 1 second.
  *
  * @note
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.

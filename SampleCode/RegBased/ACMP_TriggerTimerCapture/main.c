@@ -3,8 +3,8 @@
  * @version  V1.00
  * $Revision: 4 $
  * $Date: 15/10/06 11:42a $
- * @brief    Show how to use Analog comparator (ACMP) state change to trigger 
- *           timer capture function. P1.5 is used as comparator positive input 
+ * @brief    Show how to use Analog comparator (ACMP) state change to trigger
+ *           timer capture function. P1.5 is used as comparator positive input
  *           and Band-gap voltage as negative input.
  *
  * @note

@@ -3,7 +3,7 @@
  * @version  V0.10
  * $Revision: 7 $
  * $Date: 15/10/06 11:23a $
- * @brief    This sample demonstrates how to read/write EEPROM via GPIO pins 
+ * @brief    This sample demonstrates how to read/write EEPROM via GPIO pins
  *           which simulate I2C interface.
  *
  * @note

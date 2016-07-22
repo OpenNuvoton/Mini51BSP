@@ -4,8 +4,8 @@
  * @version  V1.00
  * $Revision: 7 $
  * $Date: 15/10/06 1:26p $
- * @brief    Use the timer pin P3.2 to demonstrate timer free counting 
- *           mode function. Also display the measured input 
+ * @brief    Use the timer pin P3.2 to demonstrate timer free counting
+ *           mode function. Also display the measured input
  *           frequency to UART console.
  *
  * @note

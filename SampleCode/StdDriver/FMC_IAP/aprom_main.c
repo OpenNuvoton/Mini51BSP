@@ -3,7 +3,7 @@
  * @version  V1.00
  * $Revision: 8 $
  * $Date: 15/10/06 1:19p $
- * @brief    It shows how to branch between APROM and LDROM. 
+ * @brief    It shows how to branch between APROM and LDROM.
  *
  * @note
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.

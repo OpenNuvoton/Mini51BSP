@@ -2,8 +2,8 @@
  * @file     main.c
  * @version  V2.00
  * $Date: 15/10/06 1:21p $
- * @brief    Demonstrate how to get PDID, get and clear reset source, configure 
- *           BOD, and output system clock to CKO pin with the system 
+ * @brief    Demonstrate how to get PDID, get and clear reset source, configure
+ *           BOD, and output system clock to CKO pin with the system
  *           clock / 4 frequency
  *
  * @note

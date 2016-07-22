@@ -51,8 +51,8 @@ uint32_t SPI_Open(SPI_T *spi,
     u32Pclk = CLK_GetHCLKFreq();
 
     u32Div = 0xffff;
-	spi->SSR |= SPI_SSR_SS_LTRIG_Msk;
-	
+    spi->SSR |= SPI_SSR_SS_LTRIG_Msk;
+
     if(u32BusClock !=0 ) {
         u32Div = (((u32Pclk / u32BusClock) + 1) >> 1) - 1;
         if(u32Div > 0xFFFF)

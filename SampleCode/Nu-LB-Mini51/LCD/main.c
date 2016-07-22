@@ -3,7 +3,7 @@
  * @version  V1.00
  * $Revision: 10 $
  * $Date: 15/10/06 11:23a $
- * @brief    This sample code demonstrates how to control a LCD 
+ * @brief    This sample code demonstrates how to control a LCD
  *           module via SPI interface
  *
  * @note

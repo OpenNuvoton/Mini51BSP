@@ -4,7 +4,7 @@
  * @version  V1.00
  * $Revision: 5 $
  * $Date: 15/10/06 11:42a $
- * @brief    Demonstrate ADC function by repeatedly convert the input of ADC 
+ * @brief    Demonstrate ADC function by repeatedly convert the input of ADC
  *           channel 0 (P5.3) and shows the result on UART console.
  *
  * @note

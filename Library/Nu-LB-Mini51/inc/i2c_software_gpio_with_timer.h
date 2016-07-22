@@ -13,15 +13,14 @@
 
 #include "Mini51Series.h"
 
-typedef struct
-{
-    uint32_t     COUNT:4;	/*!< Data Bit Count */
+typedef struct {
+    uint32_t     COUNT:4;   /*!< Data Bit Count */
     uint32_t     NACK:1;        /*!< I2C NACK */
     uint32_t     START:1;       /*!< I2C START */
     uint32_t     STOP:1;        /*!< I2C STOP */
     uint32_t     RW:1;          /*!< I2C Read/Write Bit */
     uint32_t     BUSY:1;        /*!< I2C Busy flag */
-    uint32_t     RESERVE:23;	/*!< Reserve */
+    uint32_t     RESERVE:23;    /*!< Reserve */
 } I2C_SW_FLAG_T;     /*!< I2C Software GPIO Control Structure */
 
 /*---------------------------------------------------------------------------------------------------------*/

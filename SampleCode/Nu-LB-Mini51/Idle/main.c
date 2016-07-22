@@ -3,7 +3,7 @@
  * @version  V1.00
  * $Revision: 5 $
  * $Date: 15/10/06 11:23a $
- * @brief    This sample code shows how to wake system up from idle mode with 
+ * @brief    This sample code shows how to wake system up from idle mode with
  *           WDT interrupt
  *
  * @note

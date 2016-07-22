@@ -2,12 +2,12 @@
  * @file     ascii_table.c
  * @version  V0.10
  * $Revision: 3 $
- * $Date: 13/09/30 6:48p $ 
+ * $Date: 13/09/30 6:48p $
  * @brief    This file contains the definition of ASCII code.
  *
  * @note
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
- *****************************************************************************/ 
+ *****************************************************************************/
 #include <stdio.h>
 
 const char Ascii[] =    /*!< ASCII table for LCD driver */

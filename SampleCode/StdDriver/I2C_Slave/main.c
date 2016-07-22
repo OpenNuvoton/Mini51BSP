@@ -3,7 +3,7 @@
  * @version  V2.00
  * $Revision: 2 $
  * $Date: 15/10/12 8:09p $
- * @brief    Demonstrate how to set I2C in Slave mode to receive the data of a Master. 
+ * @brief    Demonstrate how to set I2C in Slave mode to receive the data of a Master.
  *           This sample code needs to work with I2C_MASTER.
  *
  * @note

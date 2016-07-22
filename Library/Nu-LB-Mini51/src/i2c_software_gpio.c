@@ -2,12 +2,12 @@
  * @file     i2c_software_gpio.c
  * @version  V0.10
  * $Revision: 4 $
- * $Date: 13/09/30 6:48p $ 
+ * $Date: 13/09/30 6:48p $
  * @brief    MINI51 series software I2C driver source file
  *
  * @note
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
- *****************************************************************************/ 
+ *****************************************************************************/
 
 #include <stdio.h>
 #include "i2c_software_gpio.h"
@@ -16,7 +16,7 @@
 #define I2C_SW_SDA     P14
 #define I2C_SW_CLK     P15
 
-uint32_t u32_I2C_SW_Delay; 
+uint32_t u32_I2C_SW_Delay;
 
 /**
   * @brief Prepare to start software I2C
@@ -26,13 +26,13 @@ uint32_t u32_I2C_SW_Delay;
 int32_t I2C_SW_Open(uint32_t u32BusClock)
 {
     if(u32BusClock>500000)
-        u32_I2C_SW_Delay = 1;         
+        u32_I2C_SW_Delay = 1;
     else
         u32_I2C_SW_Delay =500000/u32BusClock;    /* Compute proper divider for I2C clock */
-        
+
     /* Configure P1.4 and P1.5 as open-drain mode */
     GPIO_SetMode(P1, 0x30, GPIO_PMD_OPEN_DRAIN);
-    
+
     I2C_SW_SDA = 1;
     I2C_SW_CLK = 1;
     return 0;
@@ -47,12 +47,11 @@ int32_t I2C_SW_Open(uint32_t u32BusClock)
 int32_t I2C_SW_Send_byte(uint8_t u8Data)
 {
     uint32_t u32count;
-    for(u32count=0;u32count<8;u32count++)
-    {
+    for(u32count=0; u32count<8; u32count++) {
         I2C_SW_SDA = u8Data>>(7-u32count);
         CLK_SysTickDelay(u32_I2C_SW_Delay);
         I2C_SW_CLK = 1;
-        CLK_SysTickDelay(u32_I2C_SW_Delay);    
+        CLK_SysTickDelay(u32_I2C_SW_Delay);
         I2C_SW_CLK = 0;
     }
     I2C_SW_SDA = 1;
@@ -62,7 +61,7 @@ int32_t I2C_SW_Send_byte(uint8_t u8Data)
     u32count = I2C_SW_SDA;
     I2C_SW_CLK = 0;
 
-    return u32count;    
+    return u32count;
 }
 
 /**
@@ -77,7 +76,7 @@ int32_t I2C_SW_Send(uint8_t u8Address, uint8_t* p8Data, uint32_t u32ByteSize)
     uint32_t u32count = 0;
     if(u32ByteSize == 0)
         return 0;
-    
+
     I2C_SW_SDA = 1;
     I2C_SW_CLK = 1;
     CLK_SysTickDelay(u32_I2C_SW_Delay);
@@ -85,14 +84,13 @@ int32_t I2C_SW_Send(uint8_t u8Address, uint8_t* p8Data, uint32_t u32ByteSize)
     CLK_SysTickDelay(u32_I2C_SW_Delay);
     I2C_SW_CLK = 0;
     CLK_SysTickDelay(u32_I2C_SW_Delay);
-    
+
     if(I2C_SW_Send_byte(u8Address<<1))
         goto I2C_SW_Stop_Send;
-    
-    while(u32count<u32ByteSize)
-    {
+
+    while(u32count<u32ByteSize) {
         if(I2C_SW_Send_byte(*(p8Data+u32count++)))
-            goto I2C_SW_Stop_Send;        
+            goto I2C_SW_Stop_Send;
     }
 I2C_SW_Stop_Send:
     I2C_SW_SDA = 0;
@@ -101,7 +99,7 @@ I2C_SW_Stop_Send:
     CLK_SysTickDelay(u32_I2C_SW_Delay);
     I2C_SW_SDA = 1;
 
-    return u32count;    
+    return u32count;
 }
 
 /**
@@ -114,13 +112,12 @@ uint8_t I2C_SW_Get_byte(uint32_t u32Ack)
     uint32_t u32count;
     uint8_t u8Data=0;
 
-    
-    for(u32count=0;u32count<8;u32count++)
-    {
+
+    for(u32count=0; u32count<8; u32count++) {
         CLK_SysTickDelay(u32_I2C_SW_Delay);
         I2C_SW_CLK = 1;
         CLK_SysTickDelay(u32_I2C_SW_Delay);
-        u8Data |= I2C_SW_SDA << (7-u32count);    
+        u8Data |= I2C_SW_SDA << (7-u32count);
         I2C_SW_CLK = 0;
     }
     I2C_SW_SDA = u32Ack;
@@ -130,8 +127,8 @@ uint8_t I2C_SW_Get_byte(uint32_t u32Ack)
     CLK_SysTickDelay(u32_I2C_SW_Delay);
     I2C_SW_CLK = 0;
     I2C_SW_SDA = 1;
-    
-    return u8Data;    
+
+    return u8Data;
 }
 
 /**
@@ -146,7 +143,7 @@ int32_t I2C_SW_Get(uint8_t u8Address, uint8_t* p8Data, uint32_t u32ByteSize)
     uint32_t u32count = 0;
     if(u32ByteSize == 0)
         return 0;
-    
+
     I2C_SW_SDA = 1;
     I2C_SW_CLK = 1;
     CLK_SysTickDelay(u32_I2C_SW_Delay);
@@ -154,13 +151,12 @@ int32_t I2C_SW_Get(uint8_t u8Address, uint8_t* p8Data, uint32_t u32ByteSize)
     CLK_SysTickDelay(u32_I2C_SW_Delay);
     I2C_SW_CLK = 0;
     CLK_SysTickDelay(u32_I2C_SW_Delay);
-    
+
     if(I2C_SW_Send_byte((u8Address<<1)|1))
         goto I2C_SW_Stop_Get;
-    
-    while(u32count<(u32ByteSize-1))
-    {
-        *(p8Data+u32count++) = I2C_SW_Get_byte(0);        
+
+    while(u32count<(u32ByteSize-1)) {
+        *(p8Data+u32count++) = I2C_SW_Get_byte(0);
     }
     *(p8Data+u32count++) = I2C_SW_Get_byte(1);
 I2C_SW_Stop_Get:
@@ -170,7 +166,7 @@ I2C_SW_Stop_Get:
     CLK_SysTickDelay(u32_I2C_SW_Delay);
     I2C_SW_SDA = 1;
 
-    return u32count;    
+    return u32count;
 }
 
 

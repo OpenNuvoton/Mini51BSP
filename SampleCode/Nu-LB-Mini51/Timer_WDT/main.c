@@ -3,8 +3,8 @@
  * @version  V1.00
  * $Revision: 4 $
  * $Date: 15/10/06 11:24a $
- * @brief    This sample demonstrates how to configure timer in periodic mode 
- *           and watchdog timer. The interrupt status of timer and WDT is 
+ * @brief    This sample demonstrates how to configure timer in periodic mode
+ *           and watchdog timer. The interrupt status of timer and WDT is
  *           shown on LCD control via SPI interface
  *
  * @note

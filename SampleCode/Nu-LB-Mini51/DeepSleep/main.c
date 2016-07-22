@@ -3,7 +3,7 @@
  * @version  V1.00
  * $Revision: 8 $
  * $Date: 15/10/06 11:22a $
- * @brief    This sample code demonstrates how to let system enter and exit 
+ * @brief    This sample code demonstrates how to let system enter and exit
  *           deep sleep mode with external interrupt.
  *
  * @note

@@ -3,7 +3,7 @@
  * @version  V1.00
  * $Revision: 2 $
  * $Date: 15/10/12 8:12p $
- * @brief    Demonstrate how to communicate with an off-chip SPI slave device. 
+ * @brief    Demonstrate how to communicate with an off-chip SPI slave device.
  *           This sample code needs to work with SPI_SlaveMode.
  *
  * @note
@@ -106,8 +106,8 @@ void SPI_Init(void)
 
 void SPI_IRQHandler(void)
 {
-	SPI_CLR_UNIT_TRANS_INT_FLAG(SPI0);
-	g_u8Done = 1;
+    SPI_CLR_UNIT_TRANS_INT_FLAG(SPI0);
+    g_u8Done = 1;
 }
 
 int main(void)
@@ -122,7 +122,7 @@ int main(void)
 
     /* Init SPI */
     SPI_Init();
-    
+
     printf("\n\n");
     printf("+----------------------------------------------------------------------+\n");
     printf("|                       SPI Driver Sample Code                         |\n");
@@ -131,7 +131,7 @@ int main(void)
 
     printf("Configure SPI as a master.\n");
     printf("SPI clock rate: %d Hz\n", SPI_GetBusClock(SPI0));
-    
+
     for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
         g_au32SourceData[u32DataCount] = 0x00550000 + u32DataCount;
         g_au32DestinationData[u32DataCount] = 0;
@@ -140,24 +140,24 @@ int main(void)
     printf("Before starting the data transfer, make sure the slave device is ready. Press any key to start the transfer.\n");
     getchar();
     printf("\n");
-   
+
     SPI0->CNTRL |= SPI_CNTRL_IE_Msk;
     NVIC_EnableIRQ(SPI_IRQn);
-	
-	for(i=0;i<TEST_COUNT;i++) {
-		g_u8Done = 0;
-		SPI0->TX = g_au32SourceData[i];
-		SPI0->CNTRL |= SPI_CNTRL_GO_BUSY_Msk;
-		
-		while(!g_u8Done);
-		g_au32DestinationData[i] = SPI_READ_RX(SPI0);
-	}
-    
+
+    for(i=0; i<TEST_COUNT; i++) {
+        g_u8Done = 0;
+        SPI0->TX = g_au32SourceData[i];
+        SPI0->CNTRL |= SPI_CNTRL_GO_BUSY_Msk;
+
+        while(!g_u8Done);
+        g_au32DestinationData[i] = SPI_READ_RX(SPI0);
+    }
+
     printf("Received data:\n");
     for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
         printf("%d:\t0x%08X\n", u32DataCount, g_au32DestinationData[u32DataCount]);
     }
-        
+
     printf("The data transfer was done.\n");
 
     while(1);
