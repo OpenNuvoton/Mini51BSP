@@ -78,7 +78,7 @@ void CLK_PowerDown(void)
   */
 void CLK_Idle(void)
 {
-    CLK->PWRCON |= (CLK_PWRCON_PWR_DOWN_EN_Msk | CLK_PWRCON_PD_WU_STS_Msk);
+    CLK->PWRCON &= ~(CLK_PWRCON_PWR_DOWN_EN_Msk);
     __WFI();
 }
 
