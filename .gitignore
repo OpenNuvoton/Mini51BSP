@@ -14,6 +14,7 @@ setting/
 *.log
 *.dep
 *.bak
+*.uvgui.*
 *.uvopt
 *.txt
 !Library/CMSIS/DAP/Firmware/Examples/LPC-Link-II/Abstract.txt
