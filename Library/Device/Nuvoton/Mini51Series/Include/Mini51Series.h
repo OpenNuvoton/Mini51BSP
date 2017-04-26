@@ -5726,12 +5726,6 @@ typedef struct {
 #define P4                    ((GPIO_T *) P4_BASE)              ///< Pointer to GPIO port 4 register structure
 #define P5                    ((GPIO_T *) P5_BASE)              ///< Pointer to GPIO port 5 register structure
 #define GPIO                  ((GPIO_DBNCECON_T *) GPIO_DBNCECON_BASE)      ///< Pointer to GPIO de-bounce register structure
-#define GPIOBIT0              ((GPIOBIT_T *) GPIOBIT0_BASE)     ///< Pointer to GPIO port 0 bit access register structure
-#define GPIOBIT1              ((GPIOBIT_T *) GPIOBIT1_BASE)     ///< Pointer to GPIO port 1 bit access register structure
-#define GPIOBIT2              ((GPIOBIT_T *) GPIOBIT2_BASE)     ///< Pointer to GPIO port 2 bit access register structure
-#define GPIOBIT3              ((GPIOBIT_T *) GPIOBIT3_BASE)     ///< Pointer to GPIO port 3 bit access register structure
-#define GPIOBIT4              ((GPIOBIT_T *) GPIOBIT4_BASE)     ///< Pointer to GPIO port 4 bit access register structure
-#define GPIOBIT5              ((GPIOBIT_T *) GPIOBIT5_BASE)     ///< Pointer to GPIO port 5 bit access register structure
 #define FMC                   ((FMC_T *) FMC_BASE)              ///< Pointer to FMC register structure
 
 /*@}*/ /* end of group MINI51_PERIPHERAL_DECLARATION */
