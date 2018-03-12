@@ -26,7 +26,8 @@ void I2C_IRQHandler(void)
 
     u32Status = I2C_GET_STATUS(I2C);
 
-    switch(u32Status) {
+    switch(u32Status)
+    {
     /* Slave Transmitter Mode */
     case 0xC0:                        /* DATA has been transmitted and NACK has been returned */
     case 0xC8:                        /* DATA has been transmitted and ACK has been returned */

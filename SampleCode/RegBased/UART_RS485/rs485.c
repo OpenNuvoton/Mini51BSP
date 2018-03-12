@@ -42,7 +42,8 @@ void RS485_HANDLE()
 
     if((u32IntSts & UART_ISR_RLS_INT_Msk)&&(u32IntSts & UART_ISR_RDA_INT_Msk))           /* RLS INT & RDA INT */  //For RS485 Detect Address
     {
-        if(UART->FSR & UART_FSR_RS485_ADD_DETF_Msk) { /* ADD_IF, RS485 mode */
+        if(UART->FSR & UART_FSR_RS485_ADD_DETF_Msk)   /* ADD_IF, RS485 mode */
+        {
             addr = UART->RBR;
             UART->FSR  |= UART_FSR_RS485_ADD_DETF_Msk;    /* clear ADD_IF flag */
             printf("\nAddr=0x%x,Get:",addr);
@@ -50,21 +51,27 @@ void RS485_HANDLE()
 #if (IS_USE_RS485NMM ==1) //RS485_NMM
             /* if address match, enable RX to receive data, otherwise to disable RX. */
             /* In NMM mode,user can decide multi-address filter. In AAD mode,only one address can set */
-            if (( addr == MATCH_ADDRSS1)||( addr == MATCH_ADDRSS2)) {
+            if (( addr == MATCH_ADDRSS1)||( addr == MATCH_ADDRSS2))
+            {
                 UART->FCR &= ~ UART_FCR_RX_DIS_Msk;  /* Enable RS485 RX */
-            } else {
+            }
+            else
+            {
                 printf("\n");
                 UART->FCR |= UART_FCR_RX_DIS_Msk;      /* Disable RS485 RX */
                 UART->FCR |= UART_FCR_RFR_Msk;       /* Clear data from RX FIFO */
             }
 #endif
         }
-    } else if((u32IntSts & UART_ISR_RDA_INT_Msk) || (u32IntSts & UART_ISR_TOUT_INT_Msk) ) { /* Rx Ready or Time-out INT*/
+    }
+    else if((u32IntSts & UART_ISR_RDA_INT_Msk) || (u32IntSts & UART_ISR_TOUT_INT_Msk) )     /* Rx Ready or Time-out INT*/
+    {
         /* Handle received data */
         printf("%2d,",UART->RBR);
     }
 
-    else if(u32IntSts & UART_ISR_BUF_ERR_INT_Msk) {   /* Buffer Error INT */
+    else if(u32IntSts & UART_ISR_BUF_ERR_INT_Msk)     /* Buffer Error INT */
+    {
         printf("\nBuffer Error...\n");
         UART->FSR |= (UART_FSR_RX_OVER_IF_Msk | UART_FSR_TX_OVER_IF_Msk);
     }
@@ -84,7 +91,8 @@ void RS485_SendDataByte(uint8_t *pu8TxBuf, uint32_t u32WriteBytes)
     uint32_t u32Count;
 
     UART->LCR = (0x3 | (0x7 << UART_LCR_PBE_Pos) | (0x0 << UART_LCR_NSB_Pos));
-    for (u32Count=0; u32Count != u32WriteBytes; u32Count++) {
+    for (u32Count=0; u32Count != u32WriteBytes; u32Count++)
+    {
         while (!(UART->FSR & UART_FSR_TE_FLAG_Msk));  /* Wait Tx empty */
 
         UART->THR = pu8TxBuf[u32Count]; /* Send UART Data from buffer */
@@ -119,7 +127,8 @@ void RS485_9bitModeMaster()
     UART->ALT_CSR = UART_ALT_CSR_RS485_AUD_Msk;   /* Enable AUD to HW control RTS pin automatically */
     /* You also can use GPIO to control RTS pin for replacing AUD mode*/
     /* Prepare Data to transmit*/
-    for(i32=0; i32<10; i32++) {
+    for(i32=0; i32<10; i32++)
+    {
         g_u8SendDataGroup1[i32] = i32;
         g_u8SendDataGroup2[i32] = i32+10;
         g_u8SendDataGroup3[i32] = i32+20;

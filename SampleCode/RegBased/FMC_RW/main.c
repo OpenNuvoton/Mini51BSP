@@ -61,7 +61,8 @@ int32_t fill_data_pattern(uint32_t u32StartAddr, uint32_t u32EndAddr, uint32_t u
 {
     uint32_t u32Addr;
 
-    for (u32Addr = u32StartAddr; u32Addr < u32EndAddr; u32Addr += 4) {
+    for (u32Addr = u32StartAddr; u32Addr < u32EndAddr; u32Addr += 4)
+    {
         /* FMC_Write(u32Addr, u32Pattern) */
         FMC->ISPCMD = FMC_ISPCMD_PROGRAM;
         FMC->ISPADR = u32Addr;
@@ -78,7 +79,8 @@ int32_t  verify_data(uint32_t u32StartAddr, uint32_t u32EndAddr, uint32_t u32Pat
     uint32_t    u32Addr;
     uint32_t    u32data;
 
-    for (u32Addr = u32StartAddr; u32Addr < u32EndAddr; u32Addr += 4) {
+    for (u32Addr = u32StartAddr; u32Addr < u32EndAddr; u32Addr += 4)
+    {
         /* u32data = FMC_Read(u32Addr); */
         FMC->ISPCMD = FMC_ISPCMD_READ;
         FMC->ISPADR = u32Addr;
@@ -86,7 +88,8 @@ int32_t  verify_data(uint32_t u32StartAddr, uint32_t u32EndAddr, uint32_t u32Pat
         while (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk) ;
         u32data = FMC->ISPDAT;
 
-        if (u32data != u32Pattern) {
+        if (u32data != u32Pattern)
+        {
             printf("\nFMC_Read data verify failed at address 0x%x, read=0x%x, expect=0x%x\n", u32Addr, u32data, u32Pattern);
             return -1;
         }
@@ -99,7 +102,8 @@ int32_t  flash_test(uint32_t u32StartAddr, uint32_t u32EndAddr, uint32_t u32Patt
 {
     uint32_t    u32Addr;
 
-    for (u32Addr = u32StartAddr; u32Addr < u32EndAddr; u32Addr += FMC_FLASH_PAGE_SIZE) {
+    for (u32Addr = u32StartAddr; u32Addr < u32EndAddr; u32Addr += FMC_FLASH_PAGE_SIZE)
+    {
         printf("    Flash test address: 0x%x    \r", u32Addr);
 
         /* Erase page -  FMC_Erase(u32Addr); */
@@ -109,19 +113,22 @@ int32_t  flash_test(uint32_t u32StartAddr, uint32_t u32EndAddr, uint32_t u32Patt
         while (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk) ;
 
         // Verify if page contents are all 0xFFFFFFFF
-        if (verify_data(u32Addr, u32Addr + FMC_FLASH_PAGE_SIZE, 0xFFFFFFFF) < 0) {
+        if (verify_data(u32Addr, u32Addr + FMC_FLASH_PAGE_SIZE, 0xFFFFFFFF) < 0)
+        {
             printf("\nPage 0x%x erase verify failed!\n", u32Addr);
             return -1;
         }
 
         // Write test pattern to fill the whole page
-        if (fill_data_pattern(u32Addr, u32Addr + FMC_FLASH_PAGE_SIZE, u32Pattern) < 0) {
+        if (fill_data_pattern(u32Addr, u32Addr + FMC_FLASH_PAGE_SIZE, u32Pattern) < 0)
+        {
             printf("Failed to write page 0x%x!\n", u32Addr);
             return -1;
         }
 
         // Verify if page contents are all equal to test pattern
-        if (verify_data(u32Addr, u32Addr + FMC_FLASH_PAGE_SIZE, u32Pattern) < 0) {
+        if (verify_data(u32Addr, u32Addr + FMC_FLASH_PAGE_SIZE, u32Pattern) < 0)
+        {
             printf("\nData verify failed!\n ");
             return -1;
         }
@@ -133,7 +140,8 @@ int32_t  flash_test(uint32_t u32StartAddr, uint32_t u32EndAddr, uint32_t u32Patt
         while (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk) ;
 
         // Verify if page contents are all 0xFFFFFFFF
-        if (verify_data(u32Addr, u32Addr + FMC_FLASH_PAGE_SIZE, 0xFFFFFFFF) < 0) {
+        if (verify_data(u32Addr, u32Addr + FMC_FLASH_PAGE_SIZE, 0xFFFFFFFF) < 0)
+        {
             printf("\nPage 0x%x erase verify failed!\n", u32Addr);
             return -1;
         }
@@ -163,16 +171,19 @@ int main()
 
     /* Read BS */
     printf("  Boot Mode ............................. ");
-    if (FMC->ISPCON & FMC_ISPCON_BS_Msk) {
+    if (FMC->ISPCON & FMC_ISPCON_BS_Msk)
+    {
         printf("[LDROM]\n");
         printf("  WARNING: The driver sample code must execute in AP mode!\n");
         goto lexit;
-    } else
+    }
+    else
         printf("[APROM]\n");
 
     printf("\n\nLDROM test =>\n");
     FMC->ISPCON |= FMC_ISPCON_LDUEN_Msk;
-    if (flash_test(FMC_LDROM_BASE, FMC_LDROM_END, TEST_PATTERN) < 0) {
+    if (flash_test(FMC_LDROM_BASE, FMC_LDROM_END, TEST_PATTERN) < 0)
+    {
         printf("\n\nLDROM test failed!\n");
         goto lexit;
     }

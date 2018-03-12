@@ -91,7 +91,8 @@ int main(void)
     /* Unlock protected registers to let CPU enter power down mode */
     SYS_UnlockReg();
 
-    while(1) {
+    while(1)
+    {
         printf("Sleep 1 second\n");
         // Wait 'til UART FIFO empty to get a cleaner console out
         while(!UART_IS_TX_EMPTY(UART0));

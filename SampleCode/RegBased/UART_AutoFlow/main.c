@@ -144,22 +144,26 @@ void UART_TEST_HANDLE()
     uint8_t u8InChar=0xFF;
     uint32_t u32IntSts= UART->ISR;
 
-    if(u32IntSts & UART_ISR_RDA_INT_Msk) {
+    if(u32IntSts & UART_ISR_RDA_INT_Msk)
+    {
         printf("\nInput:");
 
         /* Get all the input characters */
-        while(UART->ISR & UART_ISR_RDA_IF_Msk) {
+        while(UART->ISR & UART_ISR_RDA_IF_Msk)
+        {
             /* Get the character from UART Buffer */
             u8InChar = UART->RBR;
 
             printf("%c ", u8InChar);
 
-            if(u8InChar == '0') {
+            if(u8InChar == '0')
+            {
                 g_bWait = FALSE;
             }
 
             /* Check if buffer full */
-            if(g_u32comRbytes < RXBUFSIZE) {
+            if(g_u32comRbytes < RXBUFSIZE)
+            {
                 /* En-queue the character */
                 g_u8RecData[g_u32comRtail] = u8InChar;
                 g_u32comRtail = (g_u32comRtail == (RXBUFSIZE-1)) ? 0 : (g_u32comRtail+1);
@@ -169,10 +173,12 @@ void UART_TEST_HANDLE()
         printf("\nTransmission Test:");
     }
 
-    if(u32IntSts & UART_ISR_THRE_INT_Msk) {
+    if(u32IntSts & UART_ISR_THRE_INT_Msk)
+    {
         uint16_t tmp;
         tmp = g_u32comRtail;
-        if(g_u32comRhead != tmp) {
+        if(g_u32comRhead != tmp)
+        {
             u8InChar = g_u8RecData[g_u32comRhead];
             UART->THR = u8InChar;
             g_u32comRhead = (g_u32comRhead == (RXBUFSIZE-1)) ? 0 : (g_u32comRhead+1);
@@ -221,15 +227,19 @@ void AutoFlow_FunctionTest()
     u8Item = getchar();
 
 
-    if(u8Item=='0') {
-        for(u32i=0; u32i<(RXBUFSIZE-1); u32i++) {
+    if(u8Item=='0')
+    {
+        for(u32i=0; u32i<(RXBUFSIZE-1); u32i++)
+        {
             UART->THR = ((u32i+1)&0xFF);
 
             /* Slave will control RTS pin*/
             while(UART->MCR & UART_MCR_RTS_ST_Msk);
         }
         printf("\n Transmit Done\n");
-    } else {
+    }
+    else
+    {
         g_i32pointer = 0;
 
         /* Enable RDA\RLS\RTO Interrupt  */
@@ -246,13 +256,16 @@ void AutoFlow_FunctionTest()
 
         printf("Starting to receive %d bytes data...\n", RXBUFSIZE);
 
-        while(g_i32pointer<(RXBUFSIZE-1)) {
+        while(g_i32pointer<(RXBUFSIZE-1))
+        {
             printf("%d\r",g_i32pointer);
         }
 
         /* Compare Data */
-        for(u32i=0; u32i!=(RXBUFSIZE-1); u32i++) {
-            if(g_u8RecData[u32i] != ((u32i+1)&0xFF) ) {
+        for(u32i=0; u32i!=(RXBUFSIZE-1); u32i++)
+        {
+            if(g_u8RecData[u32i] != ((u32i+1)&0xFF) )
+            {
                 printf("Compare Data Failed\n");
                 while(1);
             }

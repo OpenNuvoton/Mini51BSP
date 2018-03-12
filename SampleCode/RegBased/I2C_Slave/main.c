@@ -37,10 +37,13 @@ void I2C_IRQHandler(void)
 
     u32Status = I2C->I2CSTATUS;
 
-    if (I2C->I2CTOC & I2C_I2CTOC_TIF_Msk) {
+    if (I2C->I2CTOC & I2C_I2CTOC_TIF_Msk)
+    {
         /* Clear I2C Timeout Flag */
         I2C->I2CTOC |= I2C_I2CTOC_TIF_Msk;
-    } else {
+    }
+    else
+    {
         if (s_I2CHandlerFn != NULL)
             s_I2CHandlerFn(u32Status);
     }
@@ -51,35 +54,50 @@ void I2C_IRQHandler(void)
 /*---------------------------------------------------------------------------------------------------------*/
 void I2C_SlaveTRx(uint32_t u32Status)
 {
-    if (u32Status == 0x60) {                    /* Own SLA+W has been receive; ACK has been return */
+    if (u32Status == 0x60)                      /* Own SLA+W has been receive; ACK has been return */
+    {
         g_u8DataLen = 0;
         I2C->I2CON |= I2C_I2CON_AA_Msk | I2C_I2CON_SI_Msk;
-    } else if (u32Status == 0x80) {                 /* Previously address with own SLA address Data has been received; ACK has been returned*/
+    }
+    else if (u32Status == 0x80)                     /* Previously address with own SLA address Data has been received; ACK has been returned*/
+    {
         g_au8RxData[g_u8DataLen] = I2C->I2CDAT;
         g_u8DataLen++;
 
-        if (g_u8DataLen == 2) {
+        if (g_u8DataLen == 2)
+        {
             slave_buff_addr = (g_au8RxData[0] << 8) + g_au8RxData[1];
         }
 
-        if (g_u8DataLen == 3) {
+        if (g_u8DataLen == 3)
+        {
             g_u8SlvData[slave_buff_addr] = g_au8RxData[2];
             g_u8DataLen = 0;
         }
         I2C->I2CON |= I2C_I2CON_AA_Msk | I2C_I2CON_SI_Msk;
-    } else if(u32Status == 0xA8) {              /* Own SLA+R has been receive; ACK has been return */
+    }
+    else if(u32Status == 0xA8)                  /* Own SLA+R has been receive; ACK has been return */
+    {
         I2C->I2CDAT = g_u8SlvData[slave_buff_addr];
         slave_buff_addr++;
         I2C->I2CON |= I2C_I2CON_AA_Msk | I2C_I2CON_SI_Msk;
-    } else if (u32Status == 0xC0) {                /* Data byte or last data in I2CDAT has been transmitted Not ACK has been received */
+    }
+    else if (u32Status == 0xC0)                    /* Data byte or last data in I2CDAT has been transmitted Not ACK has been received */
+    {
         I2C->I2CON |= I2C_I2CON_AA_Msk | I2C_I2CON_SI_Msk;
-    } else if (u32Status == 0x88) {               /* Previously addressed with own SLA address; NOT ACK has been returned */
+    }
+    else if (u32Status == 0x88)                   /* Previously addressed with own SLA address; NOT ACK has been returned */
+    {
         g_u8DataLen = 0;
         I2C->I2CON |= I2C_I2CON_AA_Msk | I2C_I2CON_SI_Msk;
-    } else if (u32Status == 0xA0) {                /* A STOP or repeated START has been received while still addressed as Slave/Receiver*/
+    }
+    else if (u32Status == 0xA0)                    /* A STOP or repeated START has been received while still addressed as Slave/Receiver*/
+    {
         g_u8DataLen = 0;
         I2C->I2CON |= I2C_I2CON_AA_Msk | I2C_I2CON_SI_Msk;
-    } else {
+    }
+    else
+    {
         /* TO DO */
         printf("Status 0x%x is NOT processed\n", u32Status);
     }
@@ -93,7 +111,8 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Unlock protected registers */
-    while(SYS->RegLockAddr != SYS_RegLockAddr_RegUnLock_Msk) {
+    while(SYS->RegLockAddr != SYS_RegLockAddr_RegUnLock_Msk)
+    {
         SYS->RegLockAddr = 0x59;
         SYS->RegLockAddr = 0x16;
         SYS->RegLockAddr = 0x88;
@@ -109,7 +128,8 @@ void SYS_Init(void)
     /* Waiting for clock ready */
     i32TimeOutCnt = __HSI / 200; /* About 5ms */
     while((CLK->CLKSTATUS & (CLK_CLKSTATUS_XTL_STB_Msk | CLK_CLKSTATUS_IRC22M_STB_Msk)) !=
-            (CLK_CLKSTATUS_XTL_STB_Msk | CLK_CLKSTATUS_IRC22M_STB_Msk)) {
+            (CLK_CLKSTATUS_XTL_STB_Msk | CLK_CLKSTATUS_IRC22M_STB_Msk))
+    {
         if(i32TimeOutCnt-- <= 0)
             break;
     }
@@ -209,7 +229,8 @@ int32_t main (void)
     /* I2C enter no address SLV mode */
     I2C_SET_CONTROL_REG(I2C, I2C_SI | I2C_AA);
 
-    for (i = 0; i < 0x100; i++) {
+    for (i = 0; i < 0x100; i++)
+    {
         g_u8SlvData[i] = 0;
     }
 

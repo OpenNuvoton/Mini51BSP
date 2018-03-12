@@ -123,7 +123,8 @@ int main(void)
     printf("Configure SPI as a master.\n");
     printf("SPI clock rate: %d Hz\n", SPI_GetBusClock(SPI0));
 
-    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
+    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++)
+    {
         g_au32SourceData[u32DataCount] = 0x00550000 + u32DataCount;
         g_au32DestinationData[u32DataCount] = 0;
     }
@@ -135,7 +136,8 @@ int main(void)
     SPI_EnableInt(SPI0, SPI_IE_MASK);
     NVIC_EnableIRQ(SPI_IRQn);
 
-    for(i=0; i<TEST_COUNT; i++) {
+    for(i=0; i<TEST_COUNT; i++)
+    {
         g_u8Done = 0;
         SPI_WRITE_TX(SPI0, g_au32SourceData[i]);
         SPI_TRIGGER(SPI0);
@@ -145,7 +147,8 @@ int main(void)
     }
 
     printf("Received data:\n");
-    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
+    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++)
+    {
         printf("%d:\t0x%08X\n", u32DataCount, g_au32DestinationData[u32DataCount]);
     }
 

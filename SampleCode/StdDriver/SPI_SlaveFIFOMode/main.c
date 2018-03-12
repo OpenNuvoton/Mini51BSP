@@ -100,16 +100,19 @@ void SPI_IRQHandler(void)
 {
     uint32_t temp;
 
-    while( (SPI_GET_TX_FIFO_FULL_FLAG(SPI0)==0) && (g_u32TxDataCount<TEST_COUNT) ) {
+    while( (SPI_GET_TX_FIFO_FULL_FLAG(SPI0)==0) && (g_u32TxDataCount<TEST_COUNT) )
+    {
         SPI_WRITE_TX(SPI0, g_au32SourceData[g_u32TxDataCount++]);
     }
 
-    while(SPI_GET_RX_FIFO_EMPTY_FLAG(SPI0) == 0) {
+    while(SPI_GET_RX_FIFO_EMPTY_FLAG(SPI0) == 0)
+    {
         temp = SPI_READ_RX(SPI0);
         g_au32DestinationData[g_u32RxDataCount++] = temp;
     }
 
-    if(g_u32TxDataCount>=TEST_COUNT) {
+    if(g_u32TxDataCount>=TEST_COUNT)
+    {
         SPI_DisableInt(SPI0, SPI_FIFO_TX_INTEN_MASK); /* Disable TX FIFO threshold interrupt */
         g_u8Done = 1;
     }
@@ -137,7 +140,8 @@ int main(void)
     printf("Configure SPI as a slave.\n");
     printf("SPI clock rate: %d Hz\n", SPI_GetBusClock(SPI0));
 
-    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
+    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++)
+    {
         g_au32SourceData[u32DataCount] = 0x00550000 + u32DataCount;
         g_au32DestinationData[u32DataCount] = 0;
     }
@@ -149,7 +153,8 @@ int main(void)
     while(!g_u8Done);
 
     printf("Received data:\n");
-    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
+    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++)
+    {
         printf("%d:\t0x%08X\n", u32DataCount, g_au32DestinationData[u32DataCount]);
     }
 

@@ -59,22 +59,29 @@ void TMR1_IRQHandler(void)
 #if 1
     TIMER_ClearIntFlag(TIMER1);
 #else
-    if (TIMER_GetIntFlag(TIMER1) == 1) {
+    if (TIMER_GetIntFlag(TIMER1) == 1)
+    {
         /* Clear TIMER1 Timeout Interrupt Flag */
         TIMER_ClearIntFlag(TIMER1);
-    } else if (TIMER_GetCaptureIntFlag(TIMER1) == 1) {
+    }
+    else if (TIMER_GetCaptureIntFlag(TIMER1) == 1)
+    {
         /* Clear TIMER1 Capture Interrupt Flag */
         TIMER_ClearCaptureIntFlag(TIMER1);
     }
 #endif
     g_au32TMRINTCount++;
-    if( brightlight_level[g_level_change] >=g_au32TMRINTCount ) {
+    if( brightlight_level[g_level_change] >=g_au32TMRINTCount )
+    {
         /* dark LCD */
         P54 =1;
-    } else {
+    }
+    else
+    {
         /* bright LCD */
         P54 = 0;
-        if(g_au32TMRINTCount>=100) {
+        if(g_au32TMRINTCount>=100)
+        {
             g_au32TMRINTCount=0;
         }
     }

@@ -27,7 +27,8 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Unlock protected registers */
-    while(SYS->RegLockAddr != 1) {
+    while(SYS->RegLockAddr != 1)
+    {
         SYS->RegLockAddr = 0x59;
         SYS->RegLockAddr = 0x16;
         SYS->RegLockAddr = 0x88;
@@ -92,13 +93,15 @@ int main(void)
     NVIC_EnableIRQ(TMR0_IRQn);
 
     /* Unlock protected registers to control PWRCTL */
-    while(SYS->RegLockAddr != 1) {
+    while(SYS->RegLockAddr != 1)
+    {
         SYS->RegLockAddr = 0x59;
         SYS->RegLockAddr = 0x16;
         SYS->RegLockAddr = 0x88;
     }
 
-    while(1) {
+    while(1)
+    {
         printf("Sleep 1 second\n");
         // Wait 'til UART FIFO empty to get a cleaner console out
         while(!(UART0->FSR & UART_FSR_TE_FLAG_Msk));

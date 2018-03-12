@@ -99,9 +99,11 @@ int32_t main (void)
     ADC_EnableInt(ADC, ADC_ADF_INT);
     NVIC_EnableIRQ(ADC_IRQn);
 
-    while(1) {
+    while(1)
+    {
         // Trigger ADC conversion if it is idle
-        if(!ADC_IS_BUSY(ADC)) {
+        if(!ADC_IS_BUSY(ADC))
+        {
             ADC_START_CONV(ADC);
         }
     }

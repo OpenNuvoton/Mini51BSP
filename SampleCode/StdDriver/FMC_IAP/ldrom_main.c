@@ -82,7 +82,8 @@ __asm __set_SP(uint32_t _sp)
 
 static void SYS_UnlockReg(void)
 {
-    while(SYS->RegLockAddr != SYS_RegLockAddr_RegUnLock_Msk) {
+    while(SYS->RegLockAddr != SYS_RegLockAddr_RegUnLock_Msk)
+    {
         SYS->RegLockAddr = 0x59;
         SYS->RegLockAddr = 0x16;
         SYS->RegLockAddr = 0x88;

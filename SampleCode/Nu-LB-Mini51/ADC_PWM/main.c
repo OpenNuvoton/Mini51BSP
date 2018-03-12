@@ -107,7 +107,8 @@ int main (void)
     ADC_Init();
 
 
-    while(1) {
+    while(1)
+    {
         /* Start convert */
         ADC_START_CONV(ADC);
 

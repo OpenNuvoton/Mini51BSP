@@ -24,11 +24,14 @@
 void GPIO01_IRQHandler(void)
 {
     /* To check if P1.5 interrupt occurred */
-    if (P1->ISRC & BIT5) {
+    if (P1->ISRC & BIT5)
+    {
         P1->ISRC = BIT5;
         printf("P1.5 INT occurred. \n");
 
-    } else {
+    }
+    else
+    {
         /* Un-expected interrupt. Just clear all PORT0, PORT1 interrupts */
         P0->ISRC = P0->ISRC;
         P1->ISRC = P1->ISRC;
@@ -123,7 +126,8 @@ int main (void)
     NVIC_EnableIRQ(GPIO01_IRQn);
 
     /* Waiting for interrupts */
-    while (1) {
+    while (1)
+    {
         printf("Enter to Power-Down ......\n");
         while(!UART_IS_TX_EMPTY(UART0));
         CLK_PowerDown();

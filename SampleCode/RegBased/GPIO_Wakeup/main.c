@@ -24,11 +24,14 @@
 void GPIO01_IRQHandler(void)
 {
     /* To check if P1.5 interrupt occurred */
-    if (P1->ISRC & BIT5) {
+    if (P1->ISRC & BIT5)
+    {
         P1->ISRC = BIT5;
         printf("P1.5 INT occurred. \n");
 
-    } else {
+    }
+    else
+    {
         /* Un-expected interrupt. Just clear all PORT0, PORT1 interrupts */
         P0->ISRC = P0->ISRC;
         P1->ISRC = P1->ISRC;
@@ -45,7 +48,8 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Unlock protected registers */
-    while(SYS->RegLockAddr != 1) {
+    while(SYS->RegLockAddr != 1)
+    {
         SYS->RegLockAddr = 0x59;
         SYS->RegLockAddr = 0x16;
         SYS->RegLockAddr = 0x88;
@@ -112,7 +116,8 @@ int main (void)
     NVIC_EnableIRQ(GPIO01_IRQn);
 
     /* Waiting for interrupts */
-    while (1) {
+    while (1)
+    {
         printf("Enter to Power-Down ......\n");
         while(!((UART0->FSR & UART_FSR_TE_FLAG_Msk) >> UART_FSR_TE_FLAG_Pos));
         SCB->SCR = SCB_SCR_SLEEPDEEP_Msk;

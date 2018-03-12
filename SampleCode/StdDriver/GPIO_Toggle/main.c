@@ -103,7 +103,8 @@ int main (void)
     GPIO_SetMode(P3, BIT6, GPIO_PMD_OUTPUT);
     P36 = 1;
 
-    while(1) {
+    while(1)
+    {
         P36 ^= 1;
         delay_loop();
     }

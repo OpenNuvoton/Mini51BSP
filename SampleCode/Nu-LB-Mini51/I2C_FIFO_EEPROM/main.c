@@ -68,7 +68,8 @@ void ACK_Polling(void)
     /* Disable FIFO mode , don't need FIFO here */
     I2C_DISABLE_FIFO(I2C);
 
-    do {
+    do
+    {
         /* Send start */
         I2C_START(I2C);                             // S
         I2C_WAIT_READY(I2C);                        // (INT), S
@@ -79,7 +80,8 @@ void ACK_Polling(void)
         I2C_WAIT_READY(I2C);                        // (INT), ConByte(W)
         u32Status = I2C_GET_STATUS(I2C);
         I2C_SET_CONTROL_REG(I2C, I2C_STO | I2C_SI); // STOP
-    } while( u32Status!= 0x18);
+    }
+    while( u32Status!= 0x18);
 
     /* Enable FIFO mode again */
     I2C_ENABLE_FIFO(I2C);
@@ -197,7 +199,8 @@ int main(void)
     EEPROM_Read();
 
     /* Check receive buffer */
-    for(i=0; i<3; i++) {
+    for(i=0; i<3; i++)
+    {
         if(WBuf[i] != RBuf[i])
             sprintf((void *)u8String, "Data-%d Error!", i);
         else

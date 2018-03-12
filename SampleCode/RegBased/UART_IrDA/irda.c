@@ -100,11 +100,13 @@ void IrDA_FunctionTxTest()
     UART->IRCR = UART_IRCR_TX_SELECT_Msk;
 
     /* Wait Terminal input to send data to UART TX pin */
-    do {
+    do
+    {
         u8OutChar = GetChar();
         printf("   Input: %c , Send %c out\n",u8OutChar,u8OutChar);
         UART->THR = u8OutChar;
-    } while(u8OutChar !='0');
+    }
+    while(u8OutChar !='0');
 
 }
 
@@ -136,11 +138,14 @@ void IrDA_FunctionRxTest()
     printf("Waiting...\n");
 
     /* Use polling method to wait master data */
-    do {
-        if(UART->ISR & UART_ISR_RDA_IF_Msk) {
+    do
+    {
+        if(UART->ISR & UART_ISR_RDA_IF_Msk)
+        {
             u8InChar = UART->RBR;
             printf("   Input: %c \n",u8InChar);
         }
-    } while(u8InChar !='0');
+    }
+    while(u8InChar !='0');
 
 }

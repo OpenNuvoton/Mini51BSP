@@ -29,7 +29,8 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Unlock protected registers */
-    while(SYS->RegLockAddr != SYS_RegLockAddr_RegUnLock_Msk) {
+    while(SYS->RegLockAddr != SYS_RegLockAddr_RegUnLock_Msk)
+    {
         SYS->RegLockAddr = 0x59;
         SYS->RegLockAddr = 0x16;
         SYS->RegLockAddr = 0x88;
@@ -45,7 +46,8 @@ void SYS_Init(void)
     /* Waiting for clock ready */
     i32TimeOutCnt = __HSI / 200; /* About 5ms */
     while((CLK->CLKSTATUS & (CLK_CLKSTATUS_XTL_STB_Msk | CLK_CLKSTATUS_IRC22M_STB_Msk)) !=
-            (CLK_CLKSTATUS_XTL_STB_Msk | CLK_CLKSTATUS_IRC22M_STB_Msk)) {
+            (CLK_CLKSTATUS_XTL_STB_Msk | CLK_CLKSTATUS_IRC22M_STB_Msk))
+    {
         if(i32TimeOutCnt-- <= 0)
             break;
     }
@@ -108,16 +110,19 @@ void SPI_IRQHandler(void)
 {
     uint32_t temp;
 
-    while( !(SPI->STATUS & SPI_STATUS_TX_FULL_Msk) && (g_u32TxDataCount<TEST_COUNT) ) {
+    while( !(SPI->STATUS & SPI_STATUS_TX_FULL_Msk) && (g_u32TxDataCount<TEST_COUNT) )
+    {
         SPI->TX = g_au32SourceData[g_u32TxDataCount++];
     }
 
-    while(!(SPI->STATUS & SPI_STATUS_RX_EMPTY_Msk)) {
+    while(!(SPI->STATUS & SPI_STATUS_RX_EMPTY_Msk))
+    {
         temp = SPI->RX;
         g_au32DestinationData[g_u32RxDataCount++] = temp;
     }
 
-    if(g_u32TxDataCount>=TEST_COUNT) {
+    if(g_u32TxDataCount>=TEST_COUNT)
+    {
         SPI->FIFO_CTL &= ~SPI_FIFO_CTL_TX_INTEN_Msk; /* Disable TX FIFO threshold interrupt */
         g_u8Done = 1;
     }
@@ -145,7 +150,8 @@ int main(void)
     printf("Configure SPI as a master.\n");
     printf("SPI clock rate: %d Hz\n", SPI_GetBusClock(SPI));
 
-    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
+    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++)
+    {
         g_au32SourceData[u32DataCount] = 0x00550000 + u32DataCount;
         g_au32DestinationData[u32DataCount] = 0;
     }
@@ -165,7 +171,8 @@ int main(void)
     while(!g_u8Done);
 
     printf("Received data:\n");
-    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
+    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++)
+    {
         printf("%d:\t0x%08X\n", u32DataCount, g_au32DestinationData[u32DataCount]);
     }
 

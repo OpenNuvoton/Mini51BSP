@@ -19,7 +19,8 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Unlock protected registers */
-    while(SYS->RegLockAddr != 1) {
+    while(SYS->RegLockAddr != 1)
+    {
         SYS->RegLockAddr = 0x59;
         SYS->RegLockAddr = 0x16;
         SYS->RegLockAddr = 0x88;
@@ -75,7 +76,8 @@ int32_t main (void)
     printf("\nThis sample code demonstrate using WDT in polling mode\n");
 
     // WDT register is locked, so it is necessary to unlock protect register before configure WDT
-    while(SYS->RegLockAddr != 1) {
+    while(SYS->RegLockAddr != 1)
+    {
         SYS->RegLockAddr = 0x59;
         SYS->RegLockAddr = 0x16;
         SYS->RegLockAddr = 0x88;
@@ -84,9 +86,11 @@ int32_t main (void)
     // WDT timeout every 2^14 WDT clock, enable system reset
     WDT->WTCR = WDT_TIMEOUT_2POW14 | WDT_WTCR_WTE_Msk | WDT_WTCR_WTRE_Msk | WDT_WTCR_WTIE_Msk;
 
-    while(1) {
+    while(1)
+    {
         // WDT timeout flag set
-        if(WDT->WTCR & WDT_WTCR_WTIF_Msk) {
+        if(WDT->WTCR & WDT_WTCR_WTIF_Msk)
+        {
             // Reset WDT and clear time out flag
             WDT->WTCR |= WDT_WTCR_WTR_Msk;
             printf("Reset WDT counter\n");

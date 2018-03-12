@@ -20,7 +20,8 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Unlock protected registers */
-    while(SYS->RegLockAddr != 1) {
+    while(SYS->RegLockAddr != 1)
+    {
         SYS->RegLockAddr = 0x59;
         SYS->RegLockAddr = 0x16;
         SYS->RegLockAddr = 0x88;
@@ -93,7 +94,8 @@ int main (void)
     P3->PMD = (P3->PMD & ~0x3000) | (GPIO_PMD_OUTPUT << 12);
     P36 = 1;
 
-    while(1) {
+    while(1)
+    {
         P36 ^= 1;
         delay_loop();
     }

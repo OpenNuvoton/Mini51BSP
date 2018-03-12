@@ -29,7 +29,8 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Unlock protected registers */
-    while(SYS->RegLockAddr != SYS_RegLockAddr_RegUnLock_Msk) {
+    while(SYS->RegLockAddr != SYS_RegLockAddr_RegUnLock_Msk)
+    {
         SYS->RegLockAddr = 0x59;
         SYS->RegLockAddr = 0x16;
         SYS->RegLockAddr = 0x88;
@@ -45,7 +46,8 @@ void SYS_Init(void)
     /* Waiting for clock ready */
     i32TimeOutCnt = __HSI / 200; /* About 5ms */
     while((CLK->CLKSTATUS & (CLK_CLKSTATUS_XTL_STB_Msk | CLK_CLKSTATUS_IRC22M_STB_Msk)) !=
-            (CLK_CLKSTATUS_XTL_STB_Msk | CLK_CLKSTATUS_IRC22M_STB_Msk)) {
+            (CLK_CLKSTATUS_XTL_STB_Msk | CLK_CLKSTATUS_IRC22M_STB_Msk))
+    {
         if(i32TimeOutCnt-- <= 0)
             break;
     }
@@ -132,7 +134,8 @@ int main(void)
     printf("Configure SPI as a master.\n");
     printf("SPI clock rate: %d Hz\n", SPI_GetBusClock(SPI0));
 
-    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
+    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++)
+    {
         g_au32SourceData[u32DataCount] = 0x00550000 + u32DataCount;
         g_au32DestinationData[u32DataCount] = 0;
     }
@@ -144,7 +147,8 @@ int main(void)
     SPI0->CNTRL |= SPI_CNTRL_IE_Msk;
     NVIC_EnableIRQ(SPI_IRQn);
 
-    for(i=0; i<TEST_COUNT; i++) {
+    for(i=0; i<TEST_COUNT; i++)
+    {
         g_u8Done = 0;
         SPI0->TX = g_au32SourceData[i];
         SPI0->CNTRL |= SPI_CNTRL_GO_BUSY_Msk;
@@ -154,7 +158,8 @@ int main(void)
     }
 
     printf("Received data:\n");
-    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
+    for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++)
+    {
         printf("%d:\t0x%08X\n", u32DataCount, g_au32DestinationData[u32DataCount]);
     }
 

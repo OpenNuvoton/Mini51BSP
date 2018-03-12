@@ -17,9 +17,12 @@ void PWM_IRQHandler(void)
     static int toggle = 0;  // First two already fill into PWM, so start from 30%
 
     // Update PWM channel 0 duty
-    if(toggle == 0) {
+    if(toggle == 0)
+    {
         PWM_SET_CMR(PWM, 0, duty30);
-    } else {
+    }
+    else
+    {
         PWM_SET_CMR(PWM, 0, duty60);
     }
     toggle ^= 1;

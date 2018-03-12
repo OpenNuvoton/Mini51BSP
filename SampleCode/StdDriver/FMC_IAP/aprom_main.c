@@ -75,12 +75,14 @@ static int  set_IAP_boot_mode(void)
 {
     uint32_t  au32Config[2];
 
-    if (FMC_ReadConfig(au32Config, 2) < 0) {
+    if (FMC_ReadConfig(au32Config, 2) < 0)
+    {
         printf("\nRead User Config failed!\n");
         return -1;
     }
 
-    if (au32Config[0] & 0x40) {
+    if (au32Config[0] & 0x40)
+    {
         FMC_ENABLE_CFG_UPDATE();
         au32Config[0] &= ~0x40;
         FMC_WriteConfig(au32Config, 2);
@@ -109,9 +111,11 @@ static int  load_image_to_flash(uint32_t image_base, uint32_t image_limit, uint3
 
     printf("Program image to flash address 0x%x...", flash_addr);
     pu32Loader = (uint32_t *)image_base;
-    for (i = 0; i < u32ImageSize; i += FMC_FLASH_PAGE_SIZE) {
+    for (i = 0; i < u32ImageSize; i += FMC_FLASH_PAGE_SIZE)
+    {
         FMC_Erase(flash_addr + i);
-        for (j = 0; j < FMC_FLASH_PAGE_SIZE; j += 4) {
+        for (j = 0; j < FMC_FLASH_PAGE_SIZE; j += 4)
+        {
             FMC_Write(flash_addr + i + j, pu32Loader[(i + j) / 4]);
         }
     }
@@ -120,11 +124,14 @@ static int  load_image_to_flash(uint32_t image_base, uint32_t image_limit, uint3
     printf("Verify ...");
 
     /* Verify loader */
-    for (i = 0; i < u32ImageSize; i += FMC_FLASH_PAGE_SIZE) {
-        for (j = 0; j < FMC_FLASH_PAGE_SIZE; j += 4) {
+    for (i = 0; i < u32ImageSize; i += FMC_FLASH_PAGE_SIZE)
+    {
+        for (j = 0; j < FMC_FLASH_PAGE_SIZE; j += 4)
+        {
             u32Data = FMC_Read(flash_addr + i + j);
 
-            if (u32Data != pu32Loader[(i+j)/4]) {
+            if (u32Data != pu32Loader[(i+j)/4])
+            {
                 printf("data mismatch on 0x%x, [0x%x], [0x%x]\n", flash_addr + i + j, u32Data, pu32Loader[(i+j)/4]);
                 return -1;
             }
@@ -158,7 +165,8 @@ int main()
     /* Enable FMC ISP function */
     FMC_Open();
 
-    if (set_IAP_boot_mode() < 0) {
+    if (set_IAP_boot_mode() < 0)
+    {
         printf("Failed to set IAP boot mode!\n");
         goto lexit;
     }
@@ -167,7 +175,8 @@ int main()
     printf("  Boot Mode ............................. ");
     if (FMC_GetBootSource() == 0)
         printf("[APROM]\n");
-    else {
+    else
+    {
         printf("[LDROM]\n");
         printf("  WARNING: The driver sample code must execute in AP mode!\n");
         goto lexit;
@@ -183,7 +192,8 @@ int main()
     printf("  User Config 0 ......................... [0x%08x]\n", FMC_Read(FMC_CONFIG_BASE));
     printf("  User Config 1 ......................... [0x%08x]\n", FMC_Read(FMC_CONFIG_BASE+4));
 
-    do {
+    do
+    {
         printf("\n\n\n");
         printf("+----------------------------------------+\n");
         printf("|               Select                   |\n");
@@ -195,11 +205,13 @@ int main()
         u8Item = getchar();
         printf("%c\n", u8Item);
 
-        switch (u8Item) {
+        switch (u8Item)
+        {
         case '0':
             FMC_ENABLE_LD_UPDATE();
             if (load_image_to_flash((uint32_t)&loaderImage1Base, (uint32_t)&loaderImage1Limit,
-                                    FMC_LDROM_BASE, FMC_LDROM_SIZE) != 0) {
+                                    FMC_LDROM_BASE, FMC_LDROM_SIZE) != 0)
+            {
                 printf("Load image to LDROM failed!\n");
                 goto lexit;
             }
@@ -229,7 +241,8 @@ int main()
         default :
             continue;
         }
-    } while (1);
+    }
+    while (1);
 
 
 lexit:

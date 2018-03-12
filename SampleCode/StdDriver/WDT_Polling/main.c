@@ -19,7 +19,8 @@ void WDT_IRQHandler(void)
     WDT_CLEAR_TIMEOUT_INT_FLAG();
 
     // Check WDT wake up flag
-    if(WDT_GET_TIMEOUT_WAKEUP_FLAG()) {
+    if(WDT_GET_TIMEOUT_WAKEUP_FLAG())
+    {
         printf("Wake up by WDT\n");
         // Clear WDT wake up flag
         WDT_CLEAR_TIMEOUT_WAKEUP_FLAG();
@@ -90,9 +91,11 @@ int32_t main (void)
     // Enable WDT interrupt so interrupt flag raise on timeout.
     // NVIC _not_ enabled, so there'll be _no_ interrupt
     WDT_EnableInt();
-    while(1) {
+    while(1)
+    {
         // WDT timeout flag set
-        if(WDT_GET_TIMEOUT_INT_FLAG()) {
+        if(WDT_GET_TIMEOUT_INT_FLAG())
+        {
             // Reset WDT and clear time out flag
             WDT_CLEAR_TIMEOUT_INT_FLAG();
             printf("Reset WDT counter\n");

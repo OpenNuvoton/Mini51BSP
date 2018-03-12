@@ -130,7 +130,8 @@ int32_t main (void)
 
     /* Unlock protected registers */
     SYS_UnlockReg();
-    while(1) {
+    while(1)
+    {
         /* Select system clock source as IRC10K */
         CLK->CLKSEL0 = CLK_CLKSEL0_HCLK_S_IRC10K;
 

@@ -126,7 +126,8 @@ int32_t main (void)
     printf("|    Mini51 System Driver Sample Code    |\n");
     printf("+----------------------------------------+\n");
 
-    if (M32(FLAG_ADDR) == SIGNATURE) {
+    if (M32(FLAG_ADDR) == SIGNATURE)
+    {
         printf("  CPU Reset success!\n");
         M32(FLAG_ADDR) = 0;
         printf("  Press any key to continue ...\n");
@@ -151,7 +152,8 @@ int32_t main (void)
     SYS_UnlockReg();
 
     /* Check if the write-protected registers are unlocked before BOD setting and CPU Reset */
-    if (SYS->RegLockAddr != 0) {
+    if (SYS->RegLockAddr != 0)
+    {
         printf("Protected Address is Unlocked\n");
     }
 

@@ -65,7 +65,8 @@ void TMR0_IRQHandler(void)
 {
     TIMER0->TISR |= TIMER_TISR_TIF_Msk;
 
-    if (funPtr!=NULL) {
+    if (funPtr!=NULL)
+    {
         (*funPtr)();
     }
 }
@@ -78,14 +79,19 @@ void TMR0_IRQHandler(void)
 
 void I2C_SW_I_Send_Stop(void)
 {
-    if(I2C_SW_CLK) {
+    if(I2C_SW_CLK)
+    {
         I2C_SW_SDA = 1;
         I2C_SW_STATUS.STOP = 1;
         I2C_SW_STATUS.BUSY = 0;
         funPtr = NULL;
-    } else if(I2C_SW_SDA) {
+    }
+    else if(I2C_SW_SDA)
+    {
         I2C_SW_SDA = 0;
-    } else {
+    }
+    else
+    {
         I2C_SW_CLK = 1;
     }
 }
@@ -97,24 +103,36 @@ void I2C_SW_I_Send_Stop(void)
   */
 void I2C_SW_I_Get_Byte(void)
 {
-    if(I2C_SW_STATUS.COUNT<8) {
-        if(I2C_SW_CLK) {
+    if(I2C_SW_STATUS.COUNT<8)
+    {
+        if(I2C_SW_CLK)
+        {
             u8I2C_Buffer |= I2C_SW_SDA << (7-I2C_SW_STATUS.COUNT++);
             I2C_SW_CLK = 0;
-        } else {
+        }
+        else
+        {
             I2C_SW_CLK = 1;
         }
-    } else {
-        if(I2C_SW_CLK) {
+    }
+    else
+    {
+        if(I2C_SW_CLK)
+        {
             I2C_SW_CLK = 0;
             I2C_SW_SDA = 1;
-            if(u32I2C_ByteSizeCount == u32I2C_ByteSize) {
+            if(u32I2C_ByteSizeCount == u32I2C_ByteSize)
+            {
                 funPtr = I2C_SW_I_Send_Stop;
-            } else {
+            }
+            else
+            {
                 I2C_SW_STATUS.COUNT = 0;
                 u8I2C_Buffer = 0;
             }
-        } else {
+        }
+        else
+        {
             *(p8I2C_Data + u32I2C_ByteSizeCount++) = u8I2C_Buffer;
             I2C_SW_SDA = (u32I2C_ByteSizeCount == u32I2C_ByteSize)?1:0;
             I2C_SW_CLK = 1;
@@ -129,33 +147,52 @@ void I2C_SW_I_Get_Byte(void)
   */
 void I2C_SW_I_Send_Byte(void)
 {
-    if(I2C_SW_STATUS.COUNT<8) {
-        if(I2C_SW_CLK) {
+    if(I2C_SW_STATUS.COUNT<8)
+    {
+        if(I2C_SW_CLK)
+        {
             I2C_SW_CLK = 0;
-        } else {
+        }
+        else
+        {
             I2C_SW_SDA = u8I2C_Buffer >> (7 - I2C_SW_STATUS.COUNT++);
             I2C_SW_CLK = 1;
         }
-    } else if(I2C_SW_STATUS.COUNT==8) {
-        if(I2C_SW_CLK) {
+    }
+    else if(I2C_SW_STATUS.COUNT==8)
+    {
+        if(I2C_SW_CLK)
+        {
             I2C_SW_CLK = 0;
-        } else {
+        }
+        else
+        {
             I2C_SW_SDA = 1;
             I2C_SW_STATUS.COUNT++;
             I2C_SW_CLK = 1;
         }
-    } else {
+    }
+    else
+    {
         I2C_SW_STATUS.NACK = I2C_SW_SDA;
-        if(I2C_SW_SDA) {
+        if(I2C_SW_SDA)
+        {
             funPtr = I2C_SW_I_Send_Stop;
-        } else if(I2C_SW_STATUS.RW) {
+        }
+        else if(I2C_SW_STATUS.RW)
+        {
             I2C_SW_STATUS.COUNT = 0;
             u8I2C_Buffer = 0;
             funPtr = I2C_SW_I_Get_Byte;
-        } else {
-            if(u32I2C_ByteSizeCount == u32I2C_ByteSize) {
+        }
+        else
+        {
+            if(u32I2C_ByteSizeCount == u32I2C_ByteSize)
+            {
                 funPtr = I2C_SW_I_Send_Stop;
-            } else {
+            }
+            else
+            {
                 I2C_SW_STATUS.COUNT = 0;
                 u8I2C_Buffer = *(p8I2C_Data + u32I2C_ByteSizeCount++);
             }
@@ -171,9 +208,12 @@ void I2C_SW_I_Send_Byte(void)
   */
 void I2C_SW_I_Send_Start(void)
 {
-    if(I2C_SW_SDA) {
+    if(I2C_SW_SDA)
+    {
         I2C_SW_SDA = 0;
-    } else {
+    }
+    else
+    {
         I2C_SW_CLK = 0;
         I2C_SW_STATUS.START = 1;
         funPtr = I2C_SW_I_Send_Byte;

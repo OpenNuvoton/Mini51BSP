@@ -20,7 +20,8 @@ void TMR0_IRQHandler(void)
     static int cnt = 0;
 
     cnt++;
-    if(cnt == 10) {
+    if(cnt == 10)
+    {
         printf("Input frequency is %dHz\n", 1000000 / TIMER0->TCAP);
         cnt = 0;
     }
@@ -37,7 +38,8 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Unlock protected registers */
-    while(SYS->RegLockAddr != 1) {
+    while(SYS->RegLockAddr != 1)
+    {
         SYS->RegLockAddr = 0x59;
         SYS->RegLockAddr = 0x16;
         SYS->RegLockAddr = 0x88;

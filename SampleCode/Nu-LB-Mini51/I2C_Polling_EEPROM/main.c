@@ -21,7 +21,8 @@ uint8_t g_u8Buf[256] = {0};
 void delay_loop(void)
 {
     uint32_t i, j;
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < 3; i++)
+    {
         for (j = 0; j < 60000; j++);
     }
 }
@@ -56,19 +57,24 @@ int32_t I2C_24LC64_AutoTest(void)
 
     /* Verify */
     i32Err = 0;
-    for(i=0; i<256; i++) {
-        if(EEPROM_Read(i) != i) {
+    for(i=0; i<256; i++)
+    {
+        if(EEPROM_Read(i) != i)
+        {
             i32Err = 1;
             break;
         }
     }
 
     LCD_ClearScreen();
-    if(i32Err) {
+    if(i32Err)
+    {
         LCD_Print(0, "I2C EEPROM");
         LCD_Print(1, "Write Fail");
         return -1;
-    } else {
+    }
+    else
+    {
         LCD_Print(0, "I2C EEPROM");
         LCD_Print(1, "Verify OK!");
     }
@@ -80,19 +86,24 @@ int32_t I2C_24LC64_AutoTest(void)
     EEPROM_SequentialRead(0, g_u8Buf, 256);
     /* Verify */
     i32Err = 0;
-    for(i=0; i<256; i++) {
-        if(g_u8Buf[i] != i) {
+    for(i=0; i<256; i++)
+    {
+        if(g_u8Buf[i] != i)
+        {
             i32Err = 1;
             break;
         }
     }
 
     LCD_ClearScreen();
-    if(i32Err) {
+    if(i32Err)
+    {
         LCD_Print(0, "I2C EEPROM");
         LCD_Print(1, "Seq. Read Fail");
         return -1;
-    } else {
+    }
+    else
+    {
         LCD_Print(0, "I2C EEPROM");
         LCD_Print(1, "Seq. Read OK!");
     }
@@ -111,19 +122,24 @@ int32_t I2C_24LC64_AutoTest(void)
     EEPROM_SequentialRead(0, g_u8Buf, 256);
     /* Verify */
     i32Err = 0;
-    for(i=0; i<256; i++) {
-        if(EEPROM_Read(i) != (i & 0xFF)) {
+    for(i=0; i<256; i++)
+    {
+        if(EEPROM_Read(i) != (i & 0xFF))
+        {
             i32Err = 1;
             break;
         }
     }
 
     LCD_ClearScreen();
-    if(i32Err) {
+    if(i32Err)
+    {
         LCD_Print(0, "I2C EEPROM");
         LCD_Print(1, "Page Write Fail");
         return -1;
-    } else {
+    }
+    else
+    {
         LCD_Print(0, "I2C EEPROM");
         LCD_Print(1, "Page Write OK!");
     }
@@ -146,10 +162,13 @@ int32_t I2C_24LC64_ManualTest(void)
 
 
     temp = 0x55;
-    while (1) {
-        if (isPress) {
+    while (1)
+    {
+        if (isPress)
+        {
             isPress = FALSE;
-            switch (gu8Count) {
+            switch (gu8Count)
+            {
             case 1:
                 LCD_ClearScreen();
                 LCD_Print(0, "Key1 had pressed ");

@@ -225,8 +225,10 @@ int main(void)
     /*Initialize external interrupt*/
     EINT0_Init();
 
-    while (1) {
-        if(u32Counter > 8) {
+    while (1)
+    {
+        if(u32Counter > 8)
+        {
             /* Disable Buzzer */
             PWM->POE &= ~PWM_POE_PWM3_Msk;
         }
@@ -251,7 +253,8 @@ int main(void)
         u32AdcData = (u32Counter + u32AdcData) & 0xff;
         EEPROM_Write(u32Counter,u32AdcData);
         u32I2cData = EEPROM_Read(u32Counter);
-        if (u32I2cData != u32AdcData) {
+        if (u32I2cData != u32AdcData)
+        {
             LCD_Print(2, "I2C fail ");
             while (1);
         }

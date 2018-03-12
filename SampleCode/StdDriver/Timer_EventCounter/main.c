@@ -97,7 +97,8 @@ int main(void)
     NVIC_EnableIRQ(TMR0_IRQn);
 
 
-    for(i = 0; i < 1000; i++) {
+    for(i = 0; i < 1000; i++)
+    {
         P04 = 0; // low
         P04 = 1;  // high
     }

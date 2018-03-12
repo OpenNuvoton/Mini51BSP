@@ -22,10 +22,13 @@ void EINT0_IRQHandler(void)
     /* Clear P3.2 interrupt flag */
     P3->ISRC = 1 << 2;
 
-    if(P32) {
+    if(P32)
+    {
         /* P3.2 is from low to high */
         gi8Key = 1;
-    } else {
+    }
+    else
+    {
         /* P3.2 is from high to low */
         gi8Key = 0;
     }
@@ -136,16 +139,19 @@ int main(void)
     */
     LCD_Print(1, "Press INT ");
 
-    while (1) {
+    while (1)
+    {
         char strClearVal[15] = "Count:         ";
         /* Enter power when key change from low to high */
         u32Cnt = 0;
-        while (gi8Key == 1) {
+        while (gi8Key == 1)
+        {
             sprintf(g_strBuf, "Count:%d", u32Cnt++);
             LCD_Print(3, strClearVal);
             LCD_Print(3, g_strBuf);
         }
-        while(gi8Key == 0) {
+        while(gi8Key == 0)
+        {
             sprintf(g_strBuf, "Count:%d", u32Cnt++);
             LCD_Print(3, strClearVal);
             LCD_Print(3, g_strBuf);

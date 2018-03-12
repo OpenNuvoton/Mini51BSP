@@ -131,20 +131,24 @@ void SpiLoopbackTest(void)
     SPI_WRITE_TX(SPI, 0);
 
     u32Err = 0;
-    for(u32TestCount=0; u32TestCount<100; u32TestCount++) {
+    for(u32TestCount=0; u32TestCount<100; u32TestCount++)
+    {
         /* set the source data and clear the destination buffer */
-        for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
+        for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++)
+        {
             g_au32SourceData[u32DataCount] = u32DataCount;
             g_au32DestinationData[u32DataCount] = 0;
         }
 
         u32DataCount=0;
 
-        if((u32TestCount&0x1FF) == 0) {
+        if((u32TestCount&0x1FF) == 0)
+        {
             putchar('.');
         }
 
-        while(1) {
+        while(1)
+        {
             SPI_WRITE_TX(SPI, g_au32SourceData[u32DataCount]);
             SPI_TRIGGER(SPI);
             while(SPI_IS_BUSY(SPI));
@@ -155,7 +159,8 @@ void SpiLoopbackTest(void)
         }
 
         /*  Check the received data */
-        for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++) {
+        for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++)
+        {
             if(g_au32DestinationData[u32DataCount]!=g_au32SourceData[u32DataCount])
                 u32Err = 1;
         }

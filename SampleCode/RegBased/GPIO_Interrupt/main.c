@@ -24,11 +24,14 @@
 void GPIO01_IRQHandler(void)
 {
     /* To check if P1.5 interrupt occurred */
-    if (P1->ISRC & BIT5) {
+    if (P1->ISRC & BIT5)
+    {
         P1->ISRC = BIT5;
         printf("P1.5 INT occurred. \n");
 
-    } else {
+    }
+    else
+    {
         /* Un-expected interrupt. Just clear all PORT0, PORT1 interrupts */
         P0->ISRC = P0->ISRC;
         P1->ISRC = P1->ISRC;
@@ -49,10 +52,13 @@ void GPIO01_IRQHandler(void)
 void GPIO234_IRQHandler(void)
 {
     /* To check if P2.2 interrupt occurred */
-    if (P2->ISRC & BIT2) {
+    if (P2->ISRC & BIT2)
+    {
         P2->ISRC = BIT2;
         printf("P2.2 INT occurred. \n");
-    } else {
+    }
+    else
+    {
         /* Un-expected interrupt. Just clear all PORT2, PORT3 and PORT4 interrupts */
         P2->ISRC = P2->ISRC;
         P3->ISRC = P3->ISRC;
@@ -69,7 +75,8 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Unlock protected registers */
-    while(SYS->RegLockAddr != 1) {
+    while(SYS->RegLockAddr != 1)
+    {
         SYS->RegLockAddr = 0x59;
         SYS->RegLockAddr = 0x16;
         SYS->RegLockAddr = 0x88;

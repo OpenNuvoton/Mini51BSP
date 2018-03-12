@@ -100,7 +100,8 @@ int main(void)
     /*set P2.4 or P3.6 to output mode */
     //GPIO_SetMode(P2, BIT4, GPIO_PMD_OUTPUT);        // For NuTiny-SDK-Mini51F
 
-    while(1) {
+    while(1)
+    {
         P36 = 0;            // For NuTiny-SDK-Mini51L
         //P24 = 0;          // For NuTiny-SDK-Mini51F
         delay_loop();

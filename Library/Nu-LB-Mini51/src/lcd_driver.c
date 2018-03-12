@@ -93,13 +93,15 @@ static void ShowChar(uint8_t x, uint8_t y, uint8_t ascii_word)
     unsigned char temp;
     k = (ascii_word - 32) * 16;
 
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 8; i++)
+    {
         SetPACA((x*2), (129 - (y*8) - i));
         temp = Ascii[k+i];
         SpiWrite(0x100 | temp);
     }
 
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 8; i++)
+    {
         SetPACA((x*2) + 1, (129 - (y*8) - i));
         temp = Ascii[k+i+8];
         SpiWrite(0x100 | temp);
@@ -137,12 +139,14 @@ void LCD_DisableBackLight(void)
 void LCD_Print(uint8_t line, char *str)
 {
     int i = 0;
-    do {
+    do
+    {
         ShowChar(line, i, *str++);
         i++;
         if (i > 15)
             break;
-    } while (*str != '\0');
+    }
+    while (*str != '\0');
 }
 
 /**
@@ -156,7 +160,8 @@ void LCD_ClearScreen(void)
     /*CLEAR ALL PANEL*/
     SetPACA(0x0, 0x0);
 
-    for (i = 0; i < 132 *8; i++) {
+    for (i = 0; i < 132 *8; i++)
+    {
         SpiWrite(0x100);
     }
     SpiWrite(0x10f);

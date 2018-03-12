@@ -13,7 +13,8 @@
 
 #include "Mini51Series.h"
 
-typedef struct {
+typedef struct
+{
     uint32_t     COUNT:4;   /*!< Data Bit Count */
     uint32_t     NACK:1;        /*!< I2C NACK */
     uint32_t     START:1;       /*!< I2C START */

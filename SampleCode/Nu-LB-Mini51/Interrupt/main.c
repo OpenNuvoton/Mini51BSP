@@ -194,7 +194,8 @@ int main(void)
     GPIO_Init();
 
     /* Waiting for interrupts */
-    while (1) {
+    while (1)
+    {
         printf("Deep Sleep\n");
 
         LCD_Print(2, "Deep Sleep");

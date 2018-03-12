@@ -17,10 +17,13 @@ void PWM_IRQHandler(void)
     static int toggle = 0;
 
     // Update PWM channel 0 period and duty
-    if(toggle == 0) {
+    if(toggle == 0)
+    {
         PWM->CNR[0] = 110;
         PWM->CMR[0] = 50;
-    } else {
+    }
+    else
+    {
         PWM->CNR[0] = 200;
         PWM->CMR[0] = 100;
     }
@@ -37,7 +40,8 @@ void SYS_Init(void)
     /*---------------------------------------------------------------------------------------------------------*/
 
     /* Unlock protected registers */
-    while(SYS->RegLockAddr != 1) {
+    while(SYS->RegLockAddr != 1)
+    {
         SYS->RegLockAddr = 0x59;
         SYS->RegLockAddr = 0x16;
         SYS->RegLockAddr = 0x88;
