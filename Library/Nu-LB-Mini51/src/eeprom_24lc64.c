@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "Mini51Series.h"
-#include "EEPROM_24LC64.h"
+#include "eeprom_24lc64.h"
 
 #define EEPROM_READ_ADDR      0xA1 /* Address of slave for read  */
 #define EEPROM_WRITE_ADDR     0xA0 /* Address of slave for write */

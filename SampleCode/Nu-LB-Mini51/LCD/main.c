@@ -15,7 +15,7 @@
 #include <stdint.h>
 
 #include "Mini51Series.h"
-#include "LCD_Driver.h"
+#include "lcd_driver.h"
 
 // gpio interrupt uses to change the level periodically
 uint32_t g_level_change = 0;

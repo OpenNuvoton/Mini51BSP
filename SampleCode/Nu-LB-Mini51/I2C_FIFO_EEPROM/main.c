@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "Mini51Series.h"
-#include "LCD_Driver.h"
+#include "lcd_driver.h"
 
 #define EEPROM_READ_ADDR      0xA1 /* Address of slave for read  */
 #define EEPROM_WRITE_ADDR     0xA0 /* Address of slave for write */

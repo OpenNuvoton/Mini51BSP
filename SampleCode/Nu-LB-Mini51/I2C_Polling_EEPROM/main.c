@@ -12,8 +12,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "Mini51Series.h"
-#include "LCD_Driver.h"
-#include "EEPROM_24LC64.h"
+#include "lcd_driver.h"
+#include "eeprom_24lc64.h"
 
 uint8_t gu8Count = 0, isPress = FALSE;
 uint8_t g_u8Buf[256] = {0};

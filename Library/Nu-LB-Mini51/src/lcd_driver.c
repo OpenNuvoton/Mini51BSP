@@ -9,7 +9,7 @@
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
  *****************************************************************************/
 #include "Mini51Series.h"
-#include "LCD_Driver.h"
+#include "lcd_driver.h"
 
 extern  const char Ascii[];
 
