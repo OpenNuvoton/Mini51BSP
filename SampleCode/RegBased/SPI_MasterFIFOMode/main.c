@@ -148,7 +148,6 @@ int main(void)
     printf("\n");
 
     printf("Configure SPI as a master.\n");
-    printf("SPI clock rate: %d Hz\n", SPI_GetBusClock(SPI));
 
     for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++)
     {

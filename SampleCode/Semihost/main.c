@@ -13,7 +13,9 @@
 #include <stdio.h>
 #include "Mini51Series.h"
 
-
+#if defined (__GNUC__) && !defined(__ARMCC_VERSION) && defined(OS_USE_SEMIHOSTING)
+extern void initialise_monitor_handles(void);
+#endif
 
 /*---------------------------------------------------------------------------------------------------------*/
 /* Main Function                                                                                            */
@@ -22,6 +24,10 @@
 int32_t main()
 {
     int8_t item;
+
+#if defined (__GNUC__) && !defined(__ARMCC_VERSION) && defined(OS_USE_SEMIHOSTING)
+    initialise_monitor_handles();
+#endif
 
     printf("\n Start SEMIHOST test: \n");
 

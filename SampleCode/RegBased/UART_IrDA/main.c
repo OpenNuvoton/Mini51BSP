@@ -107,7 +107,7 @@ void UART_Init()
 /* MAIN function                                                                                           */
 /*---------------------------------------------------------------------------------------------------------*/
 
-int main(void)
+int32_t main(void)
 {
     /* Init System, IP clock and multi-function I/O */
     SYS_Init();

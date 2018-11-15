@@ -10,7 +10,6 @@
  ******************************************************************************/
 #include <stdio.h>
 #include "Mini51Series.h"
-#include "gpio.h"
 
 /**
  * @brief       Port0/Port1 IRQ
@@ -23,6 +22,7 @@
  */
 void GPIO01_IRQHandler(void)
 {
+    uint32_t reg;
     /* To check if P1.5 interrupt occurred */
     if (P1->ISRC & BIT5)
     {
@@ -33,8 +33,10 @@ void GPIO01_IRQHandler(void)
     else
     {
         /* Un-expected interrupt. Just clear all PORT0, PORT1 interrupts */
-        P0->ISRC = P0->ISRC;
-        P1->ISRC = P1->ISRC;
+        reg = P0->ISRC;
+        P0->ISRC = reg;
+        reg = P1->ISRC;
+        P1->ISRC = reg;
         printf("Un-expected interrupts. \n");
     }
 }

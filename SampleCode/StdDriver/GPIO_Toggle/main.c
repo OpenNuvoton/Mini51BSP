@@ -9,8 +9,7 @@
  *
  ******************************************************************************/
 #include <stdio.h>
-#include "mini51series.h"
-#include "GPIO.h"
+#include "Mini51Series.h"
 
 
 void SYS_Init(void)

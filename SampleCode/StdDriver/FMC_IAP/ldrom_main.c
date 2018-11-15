@@ -16,6 +16,53 @@
 typedef void (FUNC_PTR)(void);
 
 
+
+#if defined (__GNUC__)
+
+#define printf    PutString
+#undef getchar
+#define getchar   GetChar
+
+/**
+  * @brief  Read a char from debug console.
+  * @param  None
+  * @return Received character from debug console
+  * @note   This API waits until UART debug port or semihost input a character
+  */
+
+char GetChar(void)
+{
+    while (1)
+    {
+        if (!(UART->FSR & UART_FSR_RX_EMPTY_Msk))
+        {
+            return (UART->RBR);
+
+        }
+    }
+}
+
+void SendChar_ToUART(int ch)
+{
+    while (UART->FSR & UART_FSR_TX_FULL_Msk);
+    UART->THR = ch;
+
+    if (ch == '\n')
+    {
+        while(UART->FSR & UART_FSR_TX_FULL_Msk);
+        UART->THR = '\r';
+    }
+}
+
+static void PutString(char *str)
+{
+    while (*str != '\0')
+    {
+        SendChar_ToUART(*str++);
+    }
+}
+#endif
+
 void SYS_Init(void)
 {
     /*---------------------------------------------------------------------------------------------------------*/
@@ -80,20 +127,10 @@ __asm __set_SP(uint32_t _sp)
 #endif
 
 
-static void SYS_UnlockReg(void)
-{
-    while(SYS->RegLockAddr != SYS_RegLockAddr_RegUnLock_Msk)
-    {
-        SYS->RegLockAddr = 0x59;
-        SYS->RegLockAddr = 0x16;
-        SYS->RegLockAddr = 0x88;
-    }
-}
-
-
 int main()
 {
     FUNC_PTR    *func;
+    uint32_t    sp;
 
     SYS_Init();
     UART_Init();
@@ -109,17 +146,22 @@ int main()
     printf("\n\nPress any key to branch to APROM...\n");
     getchar();
 
-    printf("\n\nChange VECMAP and branch to LDROM...\n");
+    printf("\n\nChange VECMAP and branch to APROM...\n");
     while (!(UART->FSR & UART_FSR_TX_EMPTY_Msk));
+
+    sp = FMC_Read(FMC_APROM_BASE);
+    func = (FUNC_PTR *)FMC_Read(FMC_APROM_BASE + 4);
 
     /*  NOTE!
      *     Before change VECMAP, user MUST disable all interrupts.
      */
     FMC_SetVectorPageAddr(FMC_APROM_BASE);
-    SYS_LockReg();
 
-    func = (FUNC_PTR *)*(uint32_t *)(FMC_APROM_BASE + 4);
-    __set_SP(*(uint32_t *)FMC_APROM_BASE);
+#if defined (__GNUC__) && !defined(__ARMCC_VERSION) /* for GNU C compiler */
+    asm("msr msp, %0" : : "r" (sp));
+#else
+    __set_SP(sp);
+#endif
     func();
 
     while (1);

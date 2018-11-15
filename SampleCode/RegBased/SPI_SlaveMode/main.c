@@ -132,7 +132,6 @@ int main(void)
     printf("\n");
 
     printf("Configure SPI as a slave.\n");
-    printf("SPI clock rate: %d Hz\n", SPI_GetBusClock(SPI0));
 
     for(u32DataCount=0; u32DataCount<TEST_COUNT; u32DataCount++)
     {

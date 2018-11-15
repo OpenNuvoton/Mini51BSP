@@ -10,7 +10,6 @@
  ******************************************************************************/
 #include <stdio.h>
 #include "Mini51Series.h"
-#include "gpio.h"
 
 
 void SYS_Init(void)
@@ -27,7 +26,7 @@ void SYS_Init(void)
         SYS->RegLockAddr = 0x88;
     }
 
-    /* Enable internal RC 22.1184MHz, and  RC 10K (fro WDT) */
+    /* Enable internal RC 22.1184MHz, and  RC 10K (for WDT) */
     CLK->PWRCON = CLK_PWRCON_IRC22M_EN_Msk | CLK_PWRCON_IRC10K_EN_Msk;
 
     /* Waiting for clock ready */

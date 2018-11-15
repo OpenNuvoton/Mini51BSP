@@ -34,7 +34,6 @@ volatile int32_t g_i32pointer = 0;
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main(void);
 void UART_TEST_HANDLE(void);
-void UART_FunctionTest(void);
 void AutoFlow_FunctionTest(void);
 
 
@@ -106,7 +105,7 @@ void UART_Init()
 /* MAIN function                                                                                           */
 /*---------------------------------------------------------------------------------------------------------*/
 
-int main(void)
+int32_t main(void)
 {
     /* Init System, IP clock and multi-function I/O */
     SYS_Init();
