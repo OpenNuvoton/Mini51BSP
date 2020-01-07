@@ -29,7 +29,9 @@ void I2C_Init(void)
     SYS->IPRSTC2 |=  SYS_IPRSTC2_I2C_RST_Msk;
     SYS->IPRSTC2 &= ~SYS_IPRSTC2_I2C_RST_Msk;
     /* Open I2C0 and set clock to 100k */
-    I2C0->I2CLK = (uint32_t)((((SystemCoreClock/2) * 10U) / (100000 * 4U) + 5U) / 10U - 1U); /* Compute proper divider for I2C clock */;
+    // SystemCoreClock = 22118400
+    //I2C0->I2CLK = (uint32_t)((((SystemCoreClock/2) * 10U) / (100000 * 4U) + 5U) / 10U - 1U); /* Compute proper divider for I2C clock */
+    I2C0->I2CLK = 27;
     I2C0->I2CON |= I2C_I2CON_ENSI_Msk;
     /* Set I2C0 ADDR0 Slave Addresses */
     I2C0->I2CADDR0  = (I2C_ADDR << 1U) | I2C_GCMODE_DISABLE;
@@ -47,15 +49,7 @@ void I2C_IRQHandler(void)
     uint32_t u32Status;
     u32Status = I2C_GET_STATUS(I2C0);
 
-    if (I2C_GET_TIMEOUT_FLAG(I2C0))
-    {
-        /* Clear I2C1 Timeout Flag */
-        I2C0->I2CTOC |= I2C_I2CTOC_TIF_Msk;
-    }
-    else
-    {
-        I2C_SlaveTRx(I2C0, u32Status);
-    }
+    I2C_SlaveTRx(I2C0, u32Status);
 }
 
 /*---------------------------------------------------------------------------------------------------------*/

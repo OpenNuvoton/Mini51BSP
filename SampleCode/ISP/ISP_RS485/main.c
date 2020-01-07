@@ -128,6 +128,7 @@ _ISP:
             PutString();
 
             while ((UART_N->FSR & UART_FSR_TX_EMPTY_Msk) == 0);
+            while ((UART_N->FSR & UART_FSR_TE_FLAG_Msk) == 0);
 
             nRTSPin = REVEIVE_MODE;
             NVIC_EnableIRQ(UART_IRQn);
