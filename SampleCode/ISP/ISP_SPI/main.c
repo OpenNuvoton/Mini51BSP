@@ -7,17 +7,23 @@
  ******************************************************************************/
 #include <stdio.h>
 #include <string.h>
-#include "ISP_USER.h"
 #include "targetdev.h"
+#include "spi_transfer.h"
+#include "isp_user.h"
 
-uint32_t Pclk0;
-uint32_t Pclk1;
-
-#define TEST_COUNT 16
-
-uint32_t u32DataCount;
-uint32_t *_response_buff;
-uint32_t spi_rcvbuf[TEST_COUNT];
+void TIMER0_Init(void)
+{
+    /* Enable IP clock */
+    CLK->APBCLK |= CLK_APBCLK_TMR0_EN_Msk;
+    /* Select IP clock source */
+    CLK->CLKSEL1 = (CLK->CLKSEL1 & (~CLK_CLKSEL1_TMR0_S_Msk)) | CLK_CLKSEL1_TMR0_S_XTAL;
+    // Set timer frequency to 3HZ
+    TIMER_Open(TIMER0, TIMER_PERIODIC_MODE, 3);
+    // Enable timer interrupt
+    TIMER_EnableInt(TIMER0);
+    // Start Timer 3
+    TIMER_Start(TIMER0);
+}
 
 void SYS_Init(void)
 {
@@ -48,73 +54,48 @@ void SYS_Init(void)
     SystemCoreClockUpdate();
 }
 
-void SPI_Init(void)
-{
-    /*---------------------------------------------------------------------------------------------------------*/
-    /* Init SPI                                                                                                */
-    /*---------------------------------------------------------------------------------------------------------*/
-    /* Configure as a slave, clock idle low, falling clock edge Tx, rising edge Rx and 32-bit transaction */
-    /* Set IP clock divider. SPI clock rate = 22MHz */
-    SPI_Open(SPI, SPI_SLAVE, SPI_MODE_0, 32, 22000000);
-
-    /* Enable the automatic hardware slave select function. Select the SS pin and configure as low-active. */
-    SPI_EnableAutoSS(SPI, SPI_SS, SPI_SS_ACTIVE_LOW);
-}
-
 int main(void)
 {
+    uint32_t cmd_buff[16];
     SYS_Init();
-    SPI_Init();
-//    CLK->AHBCLK |= CLK_AHBCLK_ISP_EN_Msk;
-//    FMC->ISPCON |= (FMC_ISPCON_ISPEN_Msk | FMC_ISPCON_APUEN_Msk);
     CLK->AHBCLK |= CLK_AHBCLK_ISP_EN_Msk;
     FMC->ISPCON |= FMC_ISPCON_ISPEN_Msk;
     g_apromSize = GetApromSize();
     GetDataFlashInfo(&g_dataFlashAddr, &g_dataFlashSize);
+    SPI_Init();
+    GPIO_Init();
+    TIMER0_Init();
 
-    /* Get APROM size, data flash size and address */
-    g_apromSize = GetApromSize();
-    GetDataFlashInfo(&g_dataFlashAddr, &g_dataFlashSize);
-
-_ISP:
-    u32DataCount = 0;
-
-    SysTick->CTRL = 0UL;
-
-    /* Check data count */
-    while(u32DataCount < TEST_COUNT)
+    while (1)
     {
-        /* Write to TX register */
-        SPI_WRITE_TX(SPI, _response_buff[u32DataCount]);
-        /* Trigger SPI data transfer */
-        SPI_TRIGGER(SPI);
-        /* Check SPI1 busy status */
-        while(SPI_IS_BUSY(SPI))
+        if (bSpiDataReady == 1)
         {
-            if(SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)
-            {
-                goto _ISP;
-            }
+            goto _ISP;
         }
 
-        /* Read RX register */
-        spi_rcvbuf[u32DataCount] = SPI_READ_RX(SPI);
-        u32DataCount++;
-
-        SysTick->LOAD = 1000 * CyclesPerUs;
-        SysTick->VAL  = (0x00);
-        SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
+        if (TIMER0->TISR & TIMER_TISR_TIF_Msk)
+        {
+            goto _APROM;
+        }
     }
 
-    /* Disable SysTick counter */
-    SysTick->CTRL = 0UL;
+_ISP:
 
-    if((u32DataCount == TEST_COUNT) && ((spi_rcvbuf[0] & 0xFFFFFF00) == 0x53504900))
+    while (1)
     {
-        spi_rcvbuf[0] &= 0x000000FF;
-        ParseCmd((unsigned char *)spi_rcvbuf, 64);
+        if (bSpiDataReady == 1)
+        {
+            memcpy(cmd_buff, spi_rcvbuf, 64);
+            bSpiDataReady = 0;
+            ParseCmd((unsigned char *)cmd_buff, 64);
+        }
     }
 
-    goto _ISP;
+_APROM:
+    outpw(&SYS->RSTSRC, 3);//clear bit
+    outpw(&FMC->ISPCON, inpw(&FMC->ISPCON) & 0xFFFFFFFC);
+    outpw(&SCB->AIRCR, (V6M_AIRCR_VECTKEY_DATA | V6M_AIRCR_SYSRESETREQ));
 
+    /* Trap the CPU */
+    while (1);
 }
