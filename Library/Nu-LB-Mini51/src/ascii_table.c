@@ -6,6 +6,7 @@
  * @brief    This file contains the definition of ASCII code.
  *
  * @note
+ * SPDX-License-Identifier: Apache-2.0
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
  *****************************************************************************/
 #include <stdio.h>

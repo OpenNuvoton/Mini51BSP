@@ -6,6 +6,7 @@
  * @brief    MINI51 series SYS driver source file
  *
  * @note
+ * SPDX-License-Identifier: Apache-2.0
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
 *****************************************************************************/
 #include "Mini51Series.h"
