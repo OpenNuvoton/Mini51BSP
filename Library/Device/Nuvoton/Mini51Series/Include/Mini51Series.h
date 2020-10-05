@@ -47,7 +47,7 @@
    *
    * <b>Copyright Notice</b>
    *
-   * Copyright (C) 2013-2018 Nuvoton Technology Corp. All rights reserved.
+   * Copyright (C) 2013-2020 Nuvoton Technology Corp. All rights reserved.
    */
 #ifndef __MINI51SERIES_H__
 #define __MINI51SERIES_H__
