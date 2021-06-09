@@ -179,6 +179,9 @@ void SYS_Init(void)
     /* Set P3.4 and P3.5 for I2C SDA and SCL */
     SYS->P3_MFP = SYS_MFP_P34_SDA | SYS_MFP_P35_SCL;
 
+    /* I2C pin enable schmitt trigger */
+    SYS->P3_MFP |= SYS_MFP_TYPE_Msk(4) | SYS_MFP_TYPE_Msk(5);
+
     /* Lock protected registers */
     SYS_LockReg();
 
