@@ -15,7 +15,7 @@
 
 typedef void (FUNC_PTR)(void);
 
-extern uint32_t  loaderImage1Base, loaderImage1Limit;
+extern uint32_t  loaderImage1Base;
 
 
 uint32_t    sp;
@@ -107,7 +107,7 @@ __asm __set_SP(uint32_t _sp)
 #endif
 
 
-static int  load_image_to_flash(uint32_t image_base, uint32_t image_limit, uint32_t flash_addr, uint32_t max_size)
+static int  load_image_to_flash(uint32_t image_base, uint32_t flash_addr, uint32_t max_size)
 {
     uint32_t   i, j, u32Data, u32ImageSize, *pu32Loader;
 
@@ -212,7 +212,7 @@ int main()
         {
         case '0':
             FMC_ENABLE_LD_UPDATE();
-            if (load_image_to_flash((uint32_t)&loaderImage1Base, (uint32_t)&loaderImage1Limit,
+            if (load_image_to_flash((uint32_t)&loaderImage1Base,
                                     FMC_LDROM_BASE, FMC_LDROM_SIZE) != 0)
             {
                 printf("Load image to LDROM failed!\n");
