@@ -58,23 +58,39 @@ extern "C"
   */
 #define I2C_START(i2c) ( (i2c)->I2CON = ((i2c)->I2CON & ~I2C_I2CON_SI_Msk) | I2C_I2CON_STA_Msk )
 
+
 /**
   * @brief This macro only set STOP bit to the control register of I2C module.
-  * @param i2c is the base address of I2C module.
-  * @return none
+  * @param[in] i2c is the base address of I2C module.
+  * @return  0   success
+  * @return  -1  time out
   */
-#define I2C_STOP(i2c) \
-do { \
-    (i2c)->I2CON |= (I2C_I2CON_SI_Msk | I2C_I2CON_STO_Msk); \
-    while((i2c)->I2CON & I2C_I2CON_STO_Msk); \
-} while(0)
+__STATIC_INLINE int32_t I2C_STOP(I2C_T *i2c)
+{
+    int32_t   tout = (SystemCoreClock / 10);
+
+    i2c->I2CON |= (I2C_I2CON_SI_Msk | I2C_I2CON_STO_Msk);
+    while ((i2c->I2CON & I2C_I2CON_STO_Msk) && (tout-- > 0)) ;
+    if (i2c->I2CON & I2C_I2CON_STO_Msk)
+        return -1;
+    return 0;
+}
 
 /**
   * @brief This macro will return when I2C module is ready.
-  * @param i2c is the base address of I2C module.
-  * @return none
+  * @param[in] i2c is the base address of I2C module.
+  * @return  0   success
+  * @return  -1  time out
   */
-#define  I2C_WAIT_READY(i2c) while(!((i2c)->I2CON & I2C_I2CON_SI_Msk))
+__STATIC_INLINE int32_t I2C_WAIT_READY(I2C_T *i2c)
+{
+    int32_t   tout = (SystemCoreClock / 10);
+
+    while (!(i2c->I2CON & I2C_I2CON_SI_Msk) && (tout-- > 0));
+    if (!(i2c->I2CON & I2C_I2CON_SI_Msk))
+        return -1;
+    return 0;
+}
 
 /**
   * @brief This macro disables the FIFO function.

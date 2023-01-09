@@ -45,13 +45,15 @@ void FMC_Close(void)
   */
 int32_t FMC_Erase(uint32_t u32PageAddr)
 {
+    int32_t  tout = FMC_TIMEOUT_ERASE;
+
     FMC->ISPCMD = FMC_ISPCMD_PAGE_ERASE;
     FMC->ISPADR = u32PageAddr;
     FMC->ISPTRG = FMC_ISPTRG_ISPGO_Msk;
 
-    while (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk) ;
+    while ((tout-- > 0) && (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk)) ;
 
-    if (FMC->ISPCON & FMC_ISPCON_ISPFF_Msk)
+    if ((tout <= 0) || (FMC->ISPCON & FMC_ISPCON_ISPFF_Msk))
     {
         FMC->ISPCON |= FMC_ISPCON_ISPFF_Msk;
         return -1;
@@ -90,11 +92,17 @@ void FMC_Open(void)
   */
 uint32_t FMC_Read(uint32_t u32Addr)
 {
+    int32_t  tout = FMC_TIMEOUT_READ;
+
     FMC->ISPCMD = FMC_ISPCMD_READ;
     FMC->ISPADR = u32Addr;
     FMC->ISPTRG = FMC_ISPTRG_ISPGO_Msk;
 
-    while (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk) ;
+    while ((tout-- > 0) && (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk)) ;
+    if (tout <= 0)
+    {
+        return 0xFFFFFFFF;
+    }
 
     return FMC->ISPDAT;
 }
@@ -106,10 +114,16 @@ uint32_t FMC_Read(uint32_t u32Addr)
   */
 uint32_t FMC_ReadCID(void)
 {
+    int32_t  tout = FMC_TIMEOUT_READ;
+
     FMC->ISPCMD = FMC_ISPCMD_READ_CID;
     FMC->ISPADR = 0x0;
     FMC->ISPTRG = FMC_ISPTRG_ISPGO_Msk;
-    while (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk) ;
+    while ((tout-- > 0) && (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk)) ;
+    if (tout <= 0)
+    {
+        return 0xFFFFFFFF;
+    }
     return FMC->ISPDAT;
 }
 
@@ -120,10 +134,16 @@ uint32_t FMC_ReadCID(void)
   */
 uint32_t FMC_ReadPID(void)
 {
+    int32_t  tout = FMC_TIMEOUT_READ;
+
     FMC->ISPCMD = FMC_ISPCMD_READ_PID;
     FMC->ISPADR = 0x04;
     FMC->ISPTRG = FMC_ISPTRG_ISPGO_Msk;
-    while (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk) ;
+    while ((tout-- > 0) && (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk)) ;
+    if (tout <= 0)
+    {
+        return 0xFFFFFFFF;
+    }
     return FMC->ISPDAT;
 }
 
@@ -135,12 +155,17 @@ uint32_t FMC_ReadPID(void)
   */
 uint32_t FMC_ReadUCID(uint32_t u32Index)
 {
+    int32_t  tout = FMC_TIMEOUT_READ;
+    
     FMC->ISPCMD = FMC_ISPCMD_READ_UID;
     FMC->ISPADR = (0x04 * u32Index) + 0x10;
     FMC->ISPTRG = FMC_ISPTRG_ISPGO_Msk;
 
     while (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk) ;
-
+    if (tout <= 0)
+    {
+        return 0xFFFFFFFF;
+    }
     return FMC->ISPDAT;
 }
 
@@ -152,12 +177,17 @@ uint32_t FMC_ReadUCID(uint32_t u32Index)
   */
 uint32_t FMC_ReadUID(uint32_t u32Index)
 {
+    int32_t  tout = FMC_TIMEOUT_READ;
+    
     FMC->ISPCMD = FMC_ISPCMD_READ_UID;
     FMC->ISPADR = 0x04 * u32Index;
     FMC->ISPTRG = FMC_ISPTRG_ISPGO_Msk;
 
     while (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk) ;
-
+    if (tout <= 0)
+    {
+        return 0xFFFFFFFF;
+    }
     return FMC->ISPDAT;
 }
 
@@ -176,12 +206,19 @@ uint32_t FMC_ReadDataFlashBaseAddr(void)
   * @brief    This function will force re-map assigned flash page to CPU address 0x0.
   * @param    u32PageAddr:  address of the page to be mapped to CPU address 0x0.
   */
-void FMC_SetVectorPageAddr(uint32_t u32PageAddr)
+uint32_t FMC_SetVectorPageAddr(uint32_t u32PageAddr)
 {
+    int32_t  tout = FMC_TIMEOUT_WRITE;
+
     FMC->ISPCMD = FMC_ISPCMD_VECMAP;
     FMC->ISPADR = u32PageAddr;
     FMC->ISPTRG = FMC_ISPTRG_ISPGO_Msk;
-    while (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk) ;
+    while ((tout-- > 0) && (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk)) ;
+    if (tout <= 0)
+    {
+        return 0xFFFFFFFF;
+    }
+    return 0;
 }
 
 
@@ -200,13 +237,20 @@ uint32_t FMC_GetVectorPageAddr(void)
   * @param    u32Addr: destination address
   * @param    u32Data: word data to be written
   */
-void FMC_Write(uint32_t u32Addr, uint32_t u32Data)
+uint32_t FMC_Write(uint32_t u32Addr, uint32_t u32Data)
 {
+    int32_t  tout = FMC_TIMEOUT_WRITE;
+
     FMC->ISPCMD = FMC_ISPCMD_PROGRAM;
     FMC->ISPADR = u32Addr;
     FMC->ISPDAT = u32Data;
     FMC->ISPTRG = FMC_ISPTRG_ISPGO_Msk;
-    while (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk) ;
+    while ((tout-- > 0) && (FMC->ISPTRG & FMC_ISPTRG_ISPGO_Msk)) ;
+    if (tout <= 0)
+    {
+        return 0xFFFFFFFF;
+    }
+    return 0;
 }
 
 

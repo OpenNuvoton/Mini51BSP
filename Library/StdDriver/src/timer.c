@@ -123,8 +123,9 @@ void TIMER_Delay(TIMER_T *timer, uint32_t u32Usec)
         __NOP();
     }
 
-    while(timer->TCSR & TIMER_TCSR_CACT_Msk);
+    delay = (SystemCoreClock / 1000000) * u32Usec * 10;
 
+    while ((timer->TCSR & TIMER_TCSR_CACT_Msk) && (delay-- > 0));
 }
 
 /**
