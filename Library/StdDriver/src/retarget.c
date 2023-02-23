@@ -33,9 +33,9 @@
 /* Global variables                                                                                        */
 /*---------------------------------------------------------------------------------------------------------*/
 
-#if !(defined(__ICCARM__) && (__VER__ >= 6010000))
+//#if !(defined(__ICCARM__) && (__VER__ >= 6010000))
 struct __FILE { int handle; /* Add whatever you need here */ };
-#endif
+//#endif
 FILE __stdout;
 FILE __stdin;
 
