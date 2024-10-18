@@ -17,7 +17,7 @@ typedef void (FUNC_PTR)(void);
 
 
 
-#if defined (__GNUC__)
+#if defined (__GNUC__) && !defined(__ARMCC_VERSION)
 
 #define printf    PutString
 #undef getchar
@@ -119,10 +119,9 @@ void UART_Init()
 
 
 #ifdef __ARMCC_VERSION
-__asm __set_SP(uint32_t _sp)
+void __set_SP(uint32_t _sp)
 {
-    MSR MSP, r0
-    BX lr
+    __set_MSP(_sp);
 }
 #endif
 

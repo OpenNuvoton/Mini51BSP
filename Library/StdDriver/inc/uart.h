@@ -305,7 +305,7 @@ extern "C"
  *    @param    uart        The base address of UART module
  *    @return    None
  */
-__INLINE void UART_CLEAR_RTS(UART_T* uart)
+__STATIC_INLINE void UART_CLEAR_RTS(UART_T* uart)
 {
     uart->MCR |= UART_MCR_LEV_RTS_Msk;
     uart->MCR &= ~UART_MCR_RTS_Msk;
@@ -317,7 +317,7 @@ __INLINE void UART_CLEAR_RTS(UART_T* uart)
  *    @param    uart        The base address of UART module
  *    @return    None
  */
-__INLINE void UART_SET_RTS(UART_T* uart)
+__STATIC_INLINE void UART_SET_RTS(UART_T* uart)
 {
     uart->MCR |= UART_MCR_LEV_RTS_Msk | UART_MCR_RTS_Msk;
 }

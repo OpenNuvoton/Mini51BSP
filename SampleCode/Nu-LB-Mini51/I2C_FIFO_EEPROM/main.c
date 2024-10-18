@@ -215,3 +215,12 @@ int main(void)
     I2C_DISABLE_FIFO(I2C);
     I2C_Close(I2C);
 }
+
+/*---------------------------------------------------------------------------------------------------------*/
+/*  Empty functions for reduce code size to fit into LDROM & solve the functions are not be defined.       */
+/*---------------------------------------------------------------------------------------------------------*/
+void ProcessHardFault()
+{}
+
+void SH_Return()
+{}

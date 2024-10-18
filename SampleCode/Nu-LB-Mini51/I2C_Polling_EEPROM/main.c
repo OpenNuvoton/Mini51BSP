@@ -374,3 +374,11 @@ int main(void)
     I2C_24LC64_ManualTest();
 }
 
+/*---------------------------------------------------------------------------------------------------------*/
+/*  Empty functions for reduce code size to fit into LDROM & solve the functions are not be defined.       */
+/*---------------------------------------------------------------------------------------------------------*/
+void ProcessHardFault()
+{}
+
+void SH_Return()
+{}
