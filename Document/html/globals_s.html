@@ -19,7 +19,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="M0Banner_v2.jpg"/></td>
   <td id="projectalign">
-   <div id="projectname">MINI51DE_BSP<span id="projectnumber">&#160;V3.02.004</span>
+   <div id="projectname">MINI51DE_BSP<span id="projectnumber">&#160;V3.03.000</span>
    </div>
    <div id="projectbrief">The Board Support Package for Mini51DE Series MCU</div>
   </td>
@@ -68,9 +68,10 @@ $(function() {
 <li>SEMIHOSTING_SYS_WRITE&#160;:&#160;<a class="el" href="d5/d32/semihosting_8h.html#a368e5417dfc8239b696ecf3233a6a955a383c529db53a8cc54631bf18bb9531d3">semihosting.h</a></li>
 <li>SEMIHOSTING_SYS_WRITE0&#160;:&#160;<a class="el" href="d5/d32/semihosting_8h.html#a368e5417dfc8239b696ecf3233a6a955abf5f7cab3b1a63f29116542674042a51">semihosting.h</a></li>
 <li>SEMIHOSTING_SYS_WRITEC&#160;:&#160;<a class="el" href="d5/d32/semihosting_8h.html#a368e5417dfc8239b696ecf3233a6a955a9c57b8c9baa11c43e0396bdc3339e9d6">semihosting.h</a></li>
-<li>SendChar()&#160;:&#160;<a class="el" href="d3/d3d/retarget_8c.html#abdd7dfc5d63ba5a36e6ca72a39bfa9e5">retarget.c</a></li>
+<li>SendChar()&#160;:&#160;<a class="el" href="d3/d3d/retarget_8c.html#a49be7df965b3acf68e2c5c82d6869ab6">retarget.c</a></li>
 <li>SendChar_ToUART()&#160;:&#160;<a class="el" href="d3/d3d/retarget_8c.html#a6810d0fa478aa8204d73d9fc5d026c64">retarget.c</a></li>
 <li>SetPACA()&#160;:&#160;<a class="el" href="da/d9b/lcd__driver_8c.html#a9a5df5d88ea29e720056407861871089">lcd_driver.c</a></li>
+<li>SH_Return()&#160;:&#160;<a class="el" href="d3/d3d/retarget_8c.html#a0a9d8f093940fa3017cf1d9337ce5f25">retarget.c</a></li>
 <li>ShowChar()&#160;:&#160;<a class="el" href="da/d9b/lcd__driver_8c.html#a1dfcd39fc3529f25c6ff7e935301b91a">lcd_driver.c</a></li>
 <li>SPI&#160;:&#160;<a class="el" href="dc/ddc/group___m_i_n_i51___p_e_r_i_p_h_e_r_a_l___d_e_c_l_a_r_a_t_i_o_n.html#gaadd93900fc87105fa3ef514675d4133b">Mini51Series.h</a></li>
 <li>SPI0&#160;:&#160;<a class="el" href="dc/ddc/group___m_i_n_i51___p_e_r_i_p_h_e_r_a_l___d_e_c_l_a_r_a_t_i_o_n.html#gaf26e39c91b262cc480085abcc450d3d5">Mini51Series.h</a></li>
@@ -228,7 +229,6 @@ $(function() {
 <li>SPI_WRITE_TX&#160;:&#160;<a class="el" href="d1/de3/group___m_i_n_i51___s_p_i___e_x_p_o_r_t_e_d___f_u_n_c_t_i_o_n_s.html#gab93785c2240ec750938f7763dba9a1b2">spi.h</a></li>
 <li>SpiWrite()&#160;:&#160;<a class="el" href="da/d9b/lcd__driver_8c.html#a60f7e004da7ab5f23d374ed1dd911518">lcd_driver.c</a></li>
 <li>SRAM_BASE&#160;:&#160;<a class="el" href="d4/d99/group___m_i_n_i51___p_e_r_i_p_h_e_r_a_l___m_e_m___m_a_p.html#ga05e8f3d2e5868754a7cd88614955aecc">Mini51Series.h</a></li>
-<li>stackDump()&#160;:&#160;<a class="el" href="d3/d3d/retarget_8c.html#af143031eca5a9fd207cf5626f932d609">retarget.c</a></li>
 <li>SVCall_IRQn&#160;:&#160;<a class="el" href="da/da1/group___m_i_n_i51___c_m_s_i_s.html#gga666eb0caeb12ec0e281415592ae89083a4ce820b3cc6cf3a796b41aadc0cf1237">Mini51Series.h</a></li>
 <li>SYS&#160;:&#160;<a class="el" href="dc/ddc/group___m_i_n_i51___p_e_r_i_p_h_e_r_a_l___d_e_c_l_a_r_a_t_i_o_n.html#gae3d9f52a1a315303ad04f0576bd42a25">Mini51Series.h</a></li>
 <li>SYS_BODCR_BOD_DISABLE&#160;:&#160;<a class="el" href="d5/d4b/group___m_i_n_i51___s_y_s___e_x_p_o_r_t_e_d___c_o_n_s_t_a_n_t_s.html#gade2b4abdfddeaca2a2fd966db05ebef7">sys.h</a></li>
@@ -552,7 +552,7 @@ $(function() {
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 24 2023 17:12:21 for MINI51DE_BSP by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Fri Oct 18 2024 18:23:41 for MINI51DE_BSP by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>
